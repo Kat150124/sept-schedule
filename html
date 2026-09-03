@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="zh-Hant"><head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260903-03-1632ed8","C":{"Abril Fatface":"YACgEZbkUVE,0","Alfa Slab One":"YACgEYS9sJU,0","Anton":"YACgEcYqQ-A,0","Archivo":"YAHO2-t-jNE,0","Arial":"YAGyDvJ_4Ts,0","Bebas Neue":"YACgESME5ew,0","Bricolage Grotesque":"YAFyMcdwzpc,0","Canva Sans":"YAFLd8sKbwc,2","Caveat":"YALBs2ploWQ,0","Comic Sans MS":"YAHO2VMiyZo,0","Cormorant Garamond":"YAFdJhX-538,0","Courier New":"YAGzXiGs0_8,0","DM Sans":"YAD1aU3sLnI,0","DM Serif Display":"YAD1aYG82rc,0","Forum":"YACgEcnnqB4,0","Fraunces":"YAEul-FRQw4,0","Georgia":"YAGzXkO0pEM,0","Helvetica Neue":"YAFcf6CtJfI,0","Impact":"YAFcfnjI7Vk,0","Inter":"YAFdJvSyp_k,3","Iowan Old Style":"YAGNIFa8j9o,0","Jacques Francois":"YAHO2a5g66Q,0","JetBrains Mono":"YAFdJksXcAk,0","Libre Baskerville":"YACgEUFdPdA,0","Manrope":"YAHO2b2feC4,0","Merriweather":"YACgEXvHxxs,0","Montserrat":"YADLjI9qxTA,0","Nunito":"YACgEX8C5Gg,0","Oleo Script":"YACgEQQ14jI,0","Phantom Sans":"YAHO2E8Pb88,0","Playfair Display":"YACgEYmuCJE,0","Poppins":"YAFdJjbTu24,1","Press Start 2P":"YAFyGr-8pmQ,0","Quicksand":"YADWjpfPmdk,0","Raleway":"YACgEVg3xZg,0","Segoe UI":"YAHNdRD1Klw,0","Source Sans 3":"YAG4lO1Mj10,0","Spectral":"YAHO2rVUHIM,0","Times New Roman":"YAGzXW3gftg,0","Times":"YAGzXW3gftg,0","Ubuntu":"YACgERDU--Q,0","Work Sans":"YAGXhLOKv44,0","Yellowtail":"YACgEYG4kG4,0","ui-monospace":"YADlN8CFZ8Q,0","ui-sans-serif":"YACkoN-xg4g,0"}}');</script><script src="/_sdk/9e99ecf74af2a081.telemetry_sdk.js" integrity="sha512-tZ7fmfTx2KpCLjXQnEuL9azQ4A5+7+xumsx6r/WYVD0zCP/8LP8hDeCypMQesmP+WyAew4g7l5Ah23Bjd6yoVg=="></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>後續執行筆記</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/fbe2ebfd64647c54.data_sdk.js" integrity="sha512-vkTX6CfvpHc3WbjK+tFJCaDuw4ERA4aEV/e5/7+MMJPMTF4RJYCI6CAwJBT/gtDW+dba4uLSsPUgDjVDHWtgUQ=="></script>
+  <script src="/_sdk/e10c717c7e974dd1.editing_sdk.js" integrity="sha512-BcrhlH+uc7adjbcWhp1iZYPDDw0dRJh9MMJKYNtKQ35BtD5tMsxKlz53TSV8BnEY+0eujtTiWSFjanv0cOjj1g=="></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600&amp;family=Source+Sans+3:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #eaeDE8;
+      --card: #f8f9f6;
+      --ink: #202a24;
+      --ink-soft: #56645c;
+      --line: #d6dbd1;
+      --teal: #2f6f6a;
+      --teal-bg: #e1edeb;
+      --plum: #8c3b53;
+      --plum-bg: #f2e3e8;
+      --amber: #a8791f;
+      --amber-bg: #f3e9d3;
+      --sage: #5f7a5c;
+      --sage-bg: #e7eee4;
+      --red: #a23b2e;
+      --red-bg: #f3e0dc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: calc(100 * min(var(--vh, 1vh), 1vh));
+      font-family: "Source Sans 3", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.55;
+    }
+
+    .app-shell {
+      width: 100%;
+      padding: 40px 24px 64px;
+    }
+
+    .notes-wrap {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .serif {
+      font-family: "Noto Serif TC", Georgia, serif;
+    }
+
+    .rule {
+      height: 2px;
+      width: 100%;
+      background: var(--ink);
+      opacity: .88;
+    }
+
+    .note-panel {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      box-shadow: 0 8px 24px rgba(32, 42, 36, .035);
+    }
+
+    .form-control {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #ffffffb8;
+      padding: 10px 12px;
+      color: var(--ink);
+      font: inherit;
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--teal);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(47, 111, 106, .14);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 88px;
+    }
+
+    .action-button {
+      border-radius: 5px;
+      padding: 10px 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border: 1px solid transparent;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .16s ease, opacity .16s ease, box-shadow .16s ease;
+    }
+
+    .action-button:hover { transform: translateY(-1px); }
+    .action-button:focus-visible,
+    .icon-action:focus-visible {
+      outline: 3px solid rgba(47, 111, 106, .32);
+      outline-offset: 2px;
+    }
+
+    .action-button:disabled {
+      cursor: wait;
+      opacity: .62;
+      transform: none;
+    }
+
+    .icon-action {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: background .16s ease, color .16s ease, border-color .16s ease;
+    }
+
+    .icon-action:hover { background: var(--teal-bg); color: var(--teal); border-color: #aac9c5; }
+    .delete-action:hover, .delete-action.is-confirming { background: var(--red-bg); color: var(--red); border-color: #dfb6af; }
+
+    .status-tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .status-done { background: var(--teal-bg); color: var(--teal); }
+    .status-partial { background: var(--amber-bg); color: var(--amber); }
+    .status-rest { background: var(--sage-bg); color: var(--sage); }
+    .status-skip { background: var(--plum-bg); color: var(--plum); }
+
+    .note-card {
+      position: relative;
+      overflow: hidden;
+      animation: reveal .32s ease both;
+    }
+
+    .note-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--teal);
+    }
+
+    .note-card[data-status="休息日"]::before { background: var(--amber); }
+    .note-card[data-status="恢復日"]::before { background: var(--sage); }
+    .note-card[data-status="調整日"]::before { background: var(--plum); }
+
+    .note-card[data-status="休息日"] .status-tag { background: var(--amber-bg); color: var(--amber); }
+    .note-card[data-status="恢復日"] .status-tag { background: var(--sage-bg); color: var(--sage); }
+    .note-card[data-status="調整日"] .status-tag { background: var(--plum-bg); color: var(--plum); }
+
+    .message {
+      min-height: 24px;
+      font-size: 14px;
+      color: var(--ink-soft);
+    }
+
+    .message.error { color: var(--red); }
+
+    .empty-state {
+      border: 1px dashed #b7c1b7;
+      border-radius: 7px;
+      padding: 42px 24px;
+      text-align: center;
+      color: var(--ink-soft);
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      .app-shell { padding: 28px 16px 44px; }
+      .form-grid { grid-template-columns: 1fr !important; }
+      .note-meta { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .form-actions { align-items: stretch; flex-direction: column; }
+      .form-actions .action-button { width: 100%; }
+    }
+  </style>
+  <script src="/_sdk/fcb6dc01f91829ac.resizing_sdk.js" type="text/javascript" integrity="sha512-YK8JfnN705qaEaVhiL7pcVB2Rs/BbdX5yxV55Az8zT/1JanyEWTw9HqCF915m9iV1YEaoil8qsjJz03l1Kb0Ug=="></script>
+ </head>
+ <body data-template-id="__page-root" style="background: rgb(234, 237, 232);">
+  <div class="app-shell">
+   <header class="notes-wrap mb-8" aria-labelledby="page-title">
+    <p data-template-id="notes-eyebrow" class="canva-text mb-1 text-sm tracking-wide" style="color: rgb(86, 100, 92); font-weight: 400; font-style: normal; font-size: 14px; letter-spacing: 0.04rem;">身體重建・訓練追蹤</p>
+    <h1 id="page-title" data-template-id="notes-title" class="canva-text serif m-0 text-3xl font-semibold leading-tight" style="color: rgb(32, 42, 36); font-weight: 600; font-style: normal; font-size: 32px;">執行筆記</h1>
+    <p data-template-id="notes-subtitle" class="canva-text mt-2 max-w-2xl text-base" style="color: rgb(86, 100, 92); font-weight: 400; font-style: normal; font-size: 16px;">記鏘每一次訓練、修復與身體回饋。</p>
+   </header>
+   <main class="notes-wrap">
+    <section aria-labelledby="entry-heading" class="mb-8">
+     <div class="mb-3 flex items-end justify-between gap-4">
+      <div>
+       <h2 id="entry-heading" data-template-id="entry-heading" class="canva-text serif m-0 text-xl font-semibold" style="color: rgb(32, 42, 36); font-weight: 600; font-style: normal; font-size: 24px;">新增執行紀錄</h2>
+       <p data-template-id="entry-helper" class="canva-text mt-1 text-sm" style="color: rgb(86, 100, 92); font-size: 14px;"></p>
+      </div>
+     </div>
+     <div class="rule mb-4"></div>
+     <form id="note-form" data-template-id="entry-panel" class="canva-panel note-panel p-5 sm:p-6" novalidate="" style="background: rgb(248, 249, 246);">
+      <div class="form-grid grid grid-cols-2 gap-4">
+       <div><label data-template-id="date-label" class="canva-text mb-1.5 block text-sm font-semibold" for="note-date" style="color: rgb(32, 42, 36); font-weight: 600; font-style: normal; font-size: 14px;">日期</label> <input id="note-date" class="form-control" type="date" required="">
+       </div>
+       <div><label data-template-id="status-label" class="canva-text mb-1.5 block text-sm font-semibold" for="note-status" style="color: rgb(32, 42, 36); font-weight: 600; font-style: normal; font-size: 14px;">類別
+</label> <select id="note-status" class="form-control" required=""> <option value="必修／常態課">必修／常態課</option> <option value="日常身體訓練">日常身體訓練</option> <option value="比賽練習">比賽練習</option> <option value="培訓">培訓</option> <option value="復健／修復">復健／修復</option> <option value="比賽">比賽</option> </select>
+       </div>
+      </div>
+      <div class="mt-4"><label data-template-id="activity-label" class="canva-text mb-1.5 block text-sm font-semibold" for="note-activity" style="color: rgb(32, 42, 36); font-weight: 600; font-style: normal; font-size: 14px;">課程或訓練內容</label> <input id="note-activity" class="form-control" type="text" required="">
+      </div>
+      <div class="mt-4"><label data-template-id="feeling-label" class="canva-text mb-1.5 block text-sm font-semibold" for="note-feeling" style="color: rgb(32, 42, 36); font-weight: 600; font-style: normal; font-size: 14px;">身體感受</label> <input id="note-feeling" class="form-control" type="text" required="">
+      </div>
+      <div class="mt-4"><label data-template-id="remarks-label" class="canva-text mb-1.5 block text-sm font-semibold" for="note-remarks" style="color: rgb(32, 42, 36); font-weight: 600; font-style: normal; font-size: 14px;">備註</label> <textarea id="note-remarks" class="form-control"></textarea>
+      </div>
+      <div class="form-actions mt-5 flex flex-wrap items-center gap-3"><button id="save-button" data-template-id="save-button" class="canva-button action-button" type="submit" style="background: rgb(47, 111, 106); color: rgb(255, 255, 255);"> <i data-lucide="save" width="17" height="17" aria-hidden="true"></i> <span data-template-id="save-button-text" class="canva-text" style="color: rgb(255, 255, 255); font-weight: 600; font-style: normal; font-size: 16px;">儲存筆記</span> </button> <button id="cancel-button" data-template-id="cancel-button" class="canva-button action-button hidden" type="button" style="background: rgb(231, 238, 228); color: rgb(95, 122, 92);"> <i data-lucide="x" width="17" height="17" aria-hidden="true"></i> <span data-template-id="cancel-button-text" class="canva-text" style="color: rgb(95, 122, 92); font-weight: 600; font-style: normal; font-size: 16px;">取消編輯</span> </button>
+       <p id="form-message" class="message ml-1" role="status" aria-live="polite"></p>
+      </div>
+     </form>
+    </section>
+    <section aria-labelledby="list-heading">
+     <div class="mb-3 flex items-end justify-between gap-4">
+      <div>
+       <h2 id="list-heading" data-template-id="list-heading" class="canva-text serif m-0 text-xl font-semibold" style="color: rgb(32, 42, 36); font-weight: 600; font-style: normal; font-size: 24px;">執行紀錄</h2>
+       <p data-template-id="list-helper" class="canva-text mt-1 text-sm" style="color: rgb(86, 100, 92); font-weight: 400; font-style: normal; font-size: 14px;">依日期由新到舊排列，可隨時回頭查看與調整。</p>
+      </div><span id="record-count" class="rounded-full border border-[#d6dbd1] px-3 py-1 text-sm text-[#56645c]" aria-live="polite">0</span>
+     </div>
+     <div class="rule mb-4"></div>
+     <div id="empty-state" data-template-id="empty-state" class="canva-banner empty-state canva-text" style="background: rgb(248, 249, 246); color: rgb(86, 100, 92); font-weight: 400; font-style: normal; font-size: 16px;">還沒有執行筆記。從上方新增第一筆訓練或修復紀錄吧。</div>
+     <div id="notes-list" class="grid gap-3" aria-live="polite"></div>
+    </section>
+   </main>
+  </div>
+  <template id="note-card-template">
+   <article data-template-id="note-card" class="canva-card note-card note-panel p-5 pl-6" data-status="">
+    <div class="note-meta flex justify-between gap-4">
+     <div class="flex flex-wrap items-center gap-2"><time class="note-date text-sm font-semibold text-[#202a24]"></time> <span data-template-id="note-status-tag" class="canva-tag status-tag"></span>
+     </div>
+     <div class="flex shrink-0 gap-2"><button class="icon-action edit-action" type="button" aria-label="編輯此筆記"> <i data-lucide="pencil" width="16" height="16" aria-hidden="true"></i> </button> <button class="icon-action delete-action" type="button" aria-label="刪除此筆記"> <i data-lucide="trash-2" width="16" height="16" aria-hidden="true"></i> </button>
+     </div>
+    </div>
+    <h3 class="note-activity mt-3 text-lg font-semibold text-[#202a24]"></h3>
+    <div class="mt-3 grid gap-3 sm:grid-cols-2">
+     <div>
+      <p data-template-id="feeling-card-label" class="canva-text mb-1 text-xs font-semibold tracking-wide uppercase"></p>
+      <p class="note-feeling text-sm text-[#202a24]"></p>
+     </div>
+     <div class="note-remarks-wrap">
+      <p data-template-id="remarks-card-label" class="canva-text mb-1 text-xs font-semibold tracking-wide uppercase"></p>
+      <p class="note-remarks whitespace-pre-wrap text-sm text-[#202a24]"></p>
+     </div>
+    </div>
+   </article>
+  </template>
+  <script>
+    (() => {
+      const state = {
+        records: [],
+        editingId: null,
+        deleteCandidateId: null,
+        ready: false
+      };
+
+      const form = document.getElementById("note-form");
+      const dateInput = document.getElementById("note-date");
+      const activityInput = document.getElementById("note-activity");
+      const statusInput = document.getElementById("note-status");
+      const feelingInput = document.getElementById("note-feeling");
+      const remarksInput = document.getElementById("note-remarks");
+      const saveButton = document.getElementById("save-button");
+      const cancelButton = document.getElementById("cancel-button");
+      const message = document.getElementById("form-message");
+      const list = document.getElementById("notes-list");
+      const emptyState = document.getElementById("empty-state");
+      const recordCount = document.getElementById("record-count");
+
+      function setMessage(text, isError = false) {
+        message.textContent = text;
+        message.classList.toggle("error", isError);
+      }
+
+      function setSaving(isSaving) {
+        saveButton.disabled = isSaving;
+        cancelButton.disabled = isSaving;
+        saveButton.querySelector("svg")?.classList.toggle("animate-pulse", isSaving);
+      }
+
+      function sortRecords(records) {
+        return [...records].sort((a, b) => {
+          const byDate = String(b.date).localeCompare(String(a.date));
+          return byDate || String(b.created_at).localeCompare(String(a.created_at));
+        });
+      }
+
+      function updateCard(card, record) {
+        card.dataset.recordId = record.__backendId;
+        card.dataset.status = record.status;
+        card.querySelector(".note-date").textContent = record.date;
+        card.querySelector('[data-template-id="note-status-tag"]').textContent = record.status;
+        card.querySelector(".note-activity").textContent = record.activity;
+        card.querySelector(".note-feeling").textContent = record.body_feeling;
+        const remarks = card.querySelector(".note-remarks");
+        const remarksWrap = card.querySelector(".note-remarks-wrap");
+        remarks.textContent = record.notes || "—";
+        remarksWrap.hidden = false;
+      }
+
+      function makeCard(record) {
+        const fragment = document.getElementById("note-card-template").content.cloneNode(true);
+        const card = fragment.querySelector("article");
+        updateCard(card, record);
+
+        card.querySelector(".edit-action").addEventListener("click", () => beginEdit(record.__backendId));
+        card.querySelector(".delete-action").addEventListener("click", (event) => requestDelete(record.__backendId, event.currentTarget));
+
+        return card;
+      }
+
+      function render(records) {
+        state.records = sortRecords(records);
+        recordCount.textContent = String(state.records.length);
+        emptyState.classList.toggle("hidden", state.records.length !== 0);
+
+        const existing = new Map([...list.children].map(card => [card.dataset.recordId, card]));
+        state.records.forEach(record => {
+          const existingCard = existing.get(record.__backendId);
+          if (existingCard) {
+            updateCard(existingCard, record);
+            existing.delete(record.__backendId);
+          } else {
+            list.appendChild(makeCard(record));
+          }
+        });
+        existing.forEach(card => card.remove());
+      }
+
+      function resetForm() {
+        form.reset();
+        state.editingId = null;
+        cancelButton.classList.add("hidden");
+        setMessage("");
+      }
+
+      function beginEdit(id) {
+        const record = state.records.find(item => item.__backendId === id);
+        if (!record) return;
+
+        state.editingId = id;
+        dateInput.value = record.date;
+        activityInput.value = record.activity;
+        statusInput.value = record.status;
+        feelingInput.value = record.body_feeling;
+        remarksInput.value = record.notes || "";
+        cancelButton.classList.remove("hidden");
+        setMessage("正在編輯此筆筆記。");
+        form.scrollIntoView({ behavior: "smooth", block: "start" });
+        activityInput.focus();
+      }
+
+      async function requestDelete(id, button) {
+        if (!state.ready) return;
+
+        if (state.deleteCandidateId !== id) {
+          document.querySelectorAll(".delete-action.is-confirming").forEach(item => {
+            item.classList.remove("is-confirming");
+            item.setAttribute("aria-label", "刪除此筆記");
+          });
+          state.deleteCandidateId = id;
+          button.classList.add("is-confirming");
+          button.setAttribute("aria-label", "再次點擊以確認刪除");
+          setMessage("再次點擊紅色刪除按鈕以確認刪除。", true);
+          return;
+        }
+
+        const record = state.records.find(item => item.__backendId === id);
+        if (!record) return;
+
+        button.disabled = true;
+        setMessage("正在刪除筆記…");
+        const result = await window.dataSdk.delete(record);
+        if (!result.isOk) {
+          button.disabled = false;
+          setMessage("刪除失敗，請稍後再試。", true);
+          return;
+        }
+
+        state.deleteCandidateId = null;
+        setMessage("筆記已刪除。");
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!state.ready) {
+          setMessage("資料尚在準備中，請稍候。", true);
+          return;
+        }
+
+        if (!form.reportValidity()) return;
+
+        const payload = {
+          date: dateInput.value,
+          activity: activityInput.value.trim(),
+          status: statusInput.value,
+          body_feeling: feelingInput.value.trim(),
+          notes: remarksInput.value.trim(),
+          created_at: new Date().toISOString()
+        };
+
+        setSaving(true);
+        setMessage(state.editingId ? "正在更新筆記…" : "正在儲存筆記…");
+
+        let result;
+        if (state.editingId) {
+          const existing = state.records.find(item => item.__backendId === state.editingId);
+          result = existing ? await window.dataSdk.update({ ...existing, ...payload, created_at: existing.created_at }) : null;
+        } else {
+          if (state.records.length >= 999) {
+            setSaving(false);
+            setMessage("已達 999 筆筆記上限，請先刪除不需要的紀錄。", true);
+            return;
+          }
+          result = await window.dataSdk.create(payload);
+        }
+
+        setSaving(false);
+        if (!result || !result.isOk) {
+          setMessage("儲存失敗，請檢查後再試一次。", true);
+          return;
+        }
+
+        const wasEditing = Boolean(state.editingId);
+        resetForm();
+        setMessage(wasEditing ? "筆記已更新。" : "筆記已加入。");
+      });
+
+      cancelButton.addEventListener("click", resetForm);
+
+      const handler = {
+        onDataChanged(data) {
+          render(data);
+        }
+      };
+
+      async function initialise() {
+        const result = await window.dataSdk.init(handler);
+        if (!result.isOk) {
+          setMessage("目前無法載入筆記，請稍後重新開啟頁面。", true);
+          return;
+        }
+        state.ready = true;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+        initialise();
+      });
+    })();
+  </script>
+ 
+</body></html>
