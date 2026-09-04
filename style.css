@@ -19,11 +19,11 @@
   --training: #285494;      /* 培訓課：海軍藍 */
   --training-bg: #e2ecfd;
   
-  --eval: #6b3fa0;          /* 培訓個人考核：神祕質感紫（已改紫色！） */
+  --eval: #6b3fa0;          /* 培訓個人考核：神祕質感紫 */
   --eval-bg: #ece2f5;       /* 培訓個人考核背景：淺粉紫 */
   
   --rest: #37434f;          /* 休息日文字：深石板藍灰 */
-  --rest-bg: #cfd6de;       /* 休息日整格背景：灰藍色 */
+  --rest-bg: #cfd6de;       /* 休息日整格背景：有感的灰藍色 */
   --rest-border: #b0bcc8;   /* 休息日整格邊框 */
   
   --match: #c46210;         /* 比賽：鮮明亮橘色 */
@@ -267,12 +267,14 @@ section > h2 {
 }
 
 .tag {
-  display: inline-block;
-  font-size: 12px;
-  padding: 3px 8px;
+  display: block;
+  font-size: 11px;
+  padding: 4px 6px;
   border-radius: 5px;
-  line-height: 1.4;
-  width: fit-content;
+  line-height: 1.3;
+  width: 100%;             /* 強制填滿整格寬度 */
+  word-break: break-all;   /* 文字過長自動斷行，絕對不穿出格子 */
+  box-sizing: border-box;
 }
 
 .tag.required { background: var(--required-bg); color: var(--required); }
@@ -344,6 +346,7 @@ section > h2 {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  width: 100%;
 }
 
 .tag-remove {
@@ -460,59 +463,4 @@ footer.page-footer {
   padding-top: 18px;
   border-top: 1px solid var(--card-border);
   font-size: 12px;
-  color: var(--ink-soft);
-  text-align: center;
-}
-
-/* ==========================================================================
-   手機版響應式設定（將欄寬放大至 105px，讓格子更寬敞舒適）
-   ========================================================================== */
-@media (max-width: 768px) {
-  .calendar-scroll-container {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    margin-bottom: 1rem;
-  }
-
-  /* 放大每一欄的固定寬度為 105px */
-  .calendar-scroll-container .calendar-head,
-  .calendar-scroll-container .calendar {
-    min-width: 735px !important;
-    display: grid !important;
-    grid-template-columns: repeat(7, 105px) !important;
-    gap: 4px !important;
-  }
-
-  .calendar-scroll-container .calendar-head > div {
-    text-align: center !important;
-    font-weight: 600;
-  }
-
-  .calendar-scroll-container .calendar > .day {
-    width: 105px !important;
-    min-width: 105px !important;
-  }
-
-  .page { 
-    padding: 32px 16px 64px; 
-  }
-
-  .two-col { 
-    grid-template-columns: 1fr; 
-    gap: 4px; 
-  }
-  
-  .condition-row { 
-    grid-template-columns: 72px 1fr; 
-  }
-
-  .legend {
-    gap: 6px 14px;
-  }
-
-  .section-head-controls {
-    width: 100%;
-    justify-content: space-between;
-  }
-}
+  color
