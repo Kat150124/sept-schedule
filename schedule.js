@@ -128,13 +128,6 @@ function renderDay(day) {
   const classes = ['day'];
   if (day.nextMonth) classes.push('next-month');
 
-  // 計算這個日期對應到星期幾（0是週日，1是週一...6是週六）
-  // 讓 CSS grid 可以精準指定它應該落在第幾行，避免跑版
-  const [y, m, d] = day.date.split('-').map(Number);
-  const jsDay = new Date(y, m - 1, d).getDay();
-  // 轉換成以週一為開頭的網格位置（週一為 1，週日為 7）
-  const gridColumnStart = jsDay === 0 ? 7 : jsDay;
-
   const tagsHtml = day.tags.map((tag, idx) => `
     <span class="tag-wrap">
       <span class="tag ${tag.type}">${escapeHtml(tag.text)}</span>
@@ -160,7 +153,7 @@ function renderDay(day) {
     ? `<button type="button" class="add-tag-btn" data-date="${day.date}">＋ 新增</button>`
     : '';
 
-  return `<div class="${classes.join(' ')}" data-date="${day.date}" style="grid-column-start: ${gridColumnStart};">
+  return `<div class="${classes.join(' ')}" data-date="${day.date}">
     <div class="day-top">
       <span class="weekday">${weekdayLabel(day.date)}</span>
       <span class="date">${day.label}</span>
