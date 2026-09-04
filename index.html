@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kat的9月身體課表</title>
 <link rel="stylesheet" href="style.css">
+<!-- 如果你不想改 style.css，也可以直接把手機捲動的 CSS 寫在這裡 -->
+<style>
+  @media (max-width: 768px) {
+    .calendar-scroll-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 1rem;
+    }
+    .calendar-scroll-container .calendar,
+    .calendar-scroll-container .calendar-head {
+      min-width: 550px;
+    }
+  }
+</style>
 </head>
 <body>
 <div class="page">
@@ -121,23 +136,9 @@
     </div>
   </section>
 
+  <footer class="page-footer">Kat 的身體重建．訓練追蹤</footer>
 </div>
 
-  @media (max-width: 768px) {
-  /* 外層滑動容器 */
-  .calendar-scroll-container {
-    width: 100%;
-    overflow-x: auto;       /* 允許水平捲動 */
-    -webkit-overflow-scrolling: touch; /* 讓 iOS 裝置滑動更滑順 */
-    margin-bottom: 1rem;
-  }
-
-  /* 確保日曆本身與星期列表有足夠的最小寬度，不會被強行壓縮 */
-  .calendar-scroll-container .calendar,
-  .calendar-scroll-container .calendar-head {
-    min-width: 550px;       
-  }
-}
 <script src="config.js"></script>
 <script src="schedule.js"></script>
 </body>
