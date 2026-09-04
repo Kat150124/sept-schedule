@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>執行筆記｜Kat 的身體重建</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.full { grid-column: 1 / -1; }
+  .field label { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+  .field input,
+  .field select,
+  .field textarea {
+    font: inherit;
+    font-size: 14px;
+    padding: 10px 12px;
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--ink);
+  }
+  .field textarea { resize: vertical; min-height: 70px; }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--required);
+  }
+  .save-btn {
+    margin-top: 18px;
+    background: var(--required);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 11px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .save-btn:hover { background: #275d59; }
+  .save-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+  }
+  .section-head h2 { border: none; padding: 0; margin: 0; }
+  .count-badge {
+    font-size: 12px;
+    background: var(--required-bg);
+    color: var(--required);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+  .list-empty {
+    border: 1px dashed var(--card-border);
+    border-radius: var(--radius);
+    padding: 32px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+  .record {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+  .record + .record { margin-top: 10px; }
+  .record-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .record-head .date { font-weight: 700; font-size: 14px; }
+  .record-row { font-size: 14px; margin: 4px 0; }
+  .record-row .k { color: var(--ink-soft); margin-right: 6px; }
+  .status-msg { font-size: 13px; margin-top: 10px; min-height: 18px; }
+  .status-msg.error { color: var(--eval); }
+  .status-msg.ok { color: var(--required); }
+
+  @media (max-width: 760px) {
+    .form-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <p class="eyebrow">身體重建．訓練追蹤</p>
+  <h1>執行筆記</h1>
+  <p class="subtitle">記錄每一次訓練、修復與身體回饋。</p>
+
+  <nav class="top-nav">
+    <a href="index.html">課表</a>
+    <a href="notes.html" class="active">執行筆記</a>
+  </nav>
+
+  <section>
+    <h2>新增執行紀錄</h2>
+    <div class="panel">
+      <form id="record-form">
+        <div class="form-grid">
+          <div class="field">
+            <label for="f-date">日期</label>
+            <input type="date" id="f-date" required>
+          </div>
+          <div class="field">
+            <label for="f-category">類別</label>
+            <select id="f-category">
+              <option value="必修／常態課">必修／常態課</option>
+              <option value="練比賽">練比賽</option>
+              <option value="培訓課">培訓課</option>
+              <option value="培訓個人考核">培訓個人考核</option>
+              <option value="休息日（復健修復日）">休息日（復健修復日）</option>
+              <option value="比賽">比賽</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="f-content">課程或訓練內容</label>
+            <input type="text" id="f-content" placeholder="例如：Street Jazz-茶葉、臀肌發力訓練">
+          </div>
+          <div class="field full">
+            <label for="f-feeling">身體感受</label>
+            <input type="text" id="f-feeling" placeholder="例如：左腳踝微緊、無明顯代償">
+          </div>
+          <div class="field full">
+            <label for="f-notes">備註</label>
+            <textarea id="f-notes" placeholder="其他想記錄的事"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="save-btn" id="save-btn">💾 儲存筆記</button>
+        <div class="status-msg" id="status-msg"></div>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>執行紀錄</h2>
+      <span class="count-badge" id="count-badge">0</span>
+    </div>
+    <p class="subtitle" style="margin-top:-10px; margin-bottom:14px;">依日期由新到舊排列，可隨時回頭查看與調整。</p>
+    <div id="record-list">
+      <div class="list-empty">還沒有執行筆記。從上方新增第一筆訓練或修復紀錄吧。</div>
+    </div>
+  </section>
+
+  <footer class="page-footer">Kat 的身體重建．訓練追蹤</footer>
+</div>
+
+<script>
+/* =========================================================================
+   設定：部署 Google Apps Script 後，把網址貼在這裡（見 README.md 說明）
+   ========================================================================= */
+const APPS_SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+const form = document.getElementById('record-form');
+const saveBtn = document.getElementById('save-btn');
+const statusMsg = document.getElementById('status-msg');
+const listEl = document.getElementById('record-list');
+const countBadge = document.getElementById('count-badge');
+
+function isConfigured() {
+  return APPS_SCRIPT_URL && APPS_SCRIPT_URL.startsWith('http');
+}
+
+function setStatus(text, type) {
+  statusMsg.textContent = text || '';
+  statusMsg.className = 'status-msg' + (type ? ' ' + type : '');
+}
+
+function categoryClass(cat) {
+  if (cat.includes('必修')) return 'required';
+  if (cat.includes('練比賽')) return 'compete';
+  if (cat.includes('培訓課')) return 'training';
+  if (cat.includes('考核')) return 'eval';
+  if (cat.includes('休息')) return 'rest';
+  if (cat.includes('比賽')) return 'match';
+  return 'required';
+}
+
+function renderRecords(records) {
+  countBadge.textContent = records.length;
+  if (!records.length) {
+    listEl.innerHTML = '<div class="list-empty">還沒有執行筆記。從上方新增第一筆訓練或修復紀錄吧。</div>';
+    return;
+  }
+  const sorted = [...records].sort((a, b) => (a.date < b.date ? 1 : -1));
+  listEl.innerHTML = sorted.map(r => `
+    <div class="record">
+      <div class="record-head">
+        <span class="date">${r.date}</span>
+        <span class="tag ${categoryClass(r.category || '')}">${r.category || ''}</span>
+      </div>
+      ${r.content ? `<div class="record-row"><span class="k">課程／訓練內容</span>${r.content}</div>` : ''}
+      ${r.feeling ? `<div class="record-row"><span class="k">身體感受</span>${r.feeling}</div>` : ''}
+      ${r.notes ? `<div class="record-row"><span class="k">備註</span>${r.notes}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+async function loadRecords() {
+  if (!isConfigured()) {
+    setStatus('尚未設定 Apps Script 網址，請見 README.md 完成部署設定。', 'error');
+    return;
+  }
+  try {
+    const res = await fetch(`${APPS_SCRIPT_URL}?action=list`);
+    const data = await res.json();
+    renderRecords(data.records || []);
+  } catch (err) {
+    setStatus('讀取紀錄失敗，請確認網路連線或 Apps Script 部署設定。', 'error');
+  }
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!isConfigured()) {
+    setStatus('尚未設定 Apps Script 網址，請見 README.md 完成部署設定。', 'error');
+    return;
+  }
+
+  const record = {
+    date: document.getElementById('f-date').value,
+    category: document.getElementById('f-category').value,
+    content: document.getElementById('f-content').value.trim(),
+    feeling: document.getElementById('f-feeling').value.trim(),
+    notes: document.getElementById('f-notes').value.trim(),
+  };
+
+  if (!record.date) {
+    setStatus('請選擇日期。', 'error');
+    return;
+  }
+
+  saveBtn.disabled = true;
+  setStatus('儲存中…');
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'add', record }),
+    });
+    form.reset();
+    setStatus('已儲存！', 'ok');
+    await loadRecords();
+  } catch (err) {
+    setStatus('儲存失敗，請確認網路連線或 Apps Script 部署設定。', 'error');
+  } finally {
+    saveBtn.disabled = false;
+  }
+});
+
+loadRecords();
+</script>
+</body>
+</html>

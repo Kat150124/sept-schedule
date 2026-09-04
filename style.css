@@ -1,0 +1,304 @@
+/* ==========================================================================
+   Kat 的 9 月身體重建課表 — 共用樣式
+   ========================================================================== */
+
+:root {
+  --bg: #eaede8;
+  --card-bg: #f8f9f6;
+  --card-border: #dde2da;
+  --ink: #263029;
+  --ink-soft: #5b6660;
+
+  --required: #2f6f6a;      /* 必修／常態課 */
+  --required-bg: #e1ede9;
+  --compete: #8c3b53;       /* 練比賽 */
+  --compete-bg: #f5e3e8;
+  --training: #a8791f;      /* 培訓課 */
+  --training-bg: #f7ecd3;
+  --eval: #a23b2e;          /* 培訓個人考核 */
+  --eval-bg: #f5dedb;
+  --rest: #5f7a5c;          /* 休息日（復健修復日） */
+  --rest-bg: #e6ede3;
+  --match: #8a5a12;         /* 比賽 */
+  --match-bg: #fbeac9;
+
+  --warn-bg: #f6dcd8;
+  --warn-ink: #8a3b30;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 32px 96px;
+}
+
+.eyebrow {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 0 0 6px;
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.subtitle {
+  color: var(--ink-soft);
+  font-size: 15px;
+  margin: 0;
+}
+
+.top-nav {
+  display: flex;
+  gap: 18px;
+  margin: 28px 0 8px;
+  font-size: 14px;
+}
+
+.top-nav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 6px 2px;
+  border-bottom: 2px solid transparent;
+}
+
+.top-nav a.active {
+  color: var(--ink);
+  border-bottom-color: var(--required);
+  font-weight: 600;
+}
+
+.top-nav a:hover {
+  color: var(--ink);
+}
+
+section {
+  margin-top: 40px;
+}
+
+section > h2 {
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 10px;
+}
+
+.panel {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+}
+
+.panel + .panel {
+  margin-top: 14px;
+}
+
+.panel h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: var(--ink-soft);
+}
+
+.condition-row {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 4px 16px;
+  padding: 8px 0;
+  border-top: 1px solid var(--card-border);
+  font-size: 14px;
+}
+
+.condition-row:first-of-type { border-top: none; }
+
+.condition-row .label {
+  font-weight: 700;
+  color: var(--compete);
+}
+
+.condition-row .flow span {
+  color: var(--ink-soft);
+}
+
+.condition-row .flow .arrow {
+  margin: 0 6px;
+  color: #b7c0b9;
+}
+
+.panel p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+/* legend */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--card-border);
+  margin-bottom: 16px;
+}
+
+.legend .dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  margin-right: 6px;
+}
+
+.dot.required { background: var(--required); }
+.dot.compete { background: var(--compete); }
+.dot.training { background: var(--training); }
+.dot.eval { background: var(--eval); }
+.dot.rest { background: var(--rest); }
+.dot.match { background: var(--match); }
+
+/* calendar */
+.calendar-head {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-align: left;
+  padding: 0 2px 8px;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.day {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  min-height: 108px;
+  padding: 10px 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.day.empty {
+  background: transparent;
+  border-style: dashed;
+}
+
+.day.out-of-range {
+  opacity: 0.55;
+}
+
+.day .date {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.tag {
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  line-height: 1.4;
+  width: fit-content;
+}
+
+.tag.required { background: var(--required-bg); color: var(--required); }
+.tag.compete { background: var(--compete-bg); color: var(--compete); }
+.tag.training { background: var(--training-bg); color: var(--training); }
+.tag.eval { background: var(--eval-bg); color: var(--eval); }
+.tag.rest { background: var(--rest-bg); color: var(--rest); }
+.tag.match { background: var(--match-bg); color: var(--match); }
+
+/* warning box */
+.warning-box {
+  background: var(--warn-bg);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-top: 16px;
+}
+
+.warning-box .warn-line {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--warn-ink);
+  padding: 4px 0;
+}
+
+.warning-box .warn-line::before {
+  content: "\26A0";
+  flex-shrink: 0;
+}
+
+/* daily tasks two-column */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.two-col h4 {
+  font-size: 14px;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.two-col ul {
+  margin: 0 0 18px;
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+.two-col ul:last-child { margin-bottom: 0; }
+
+footer.page-footer {
+  margin-top: 56px;
+  padding-top: 18px;
+  border-top: 1px solid var(--card-border);
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .page { padding: 32px 16px 64px; }
+  .calendar, .calendar-head { grid-template-columns: repeat(7, minmax(0,1fr)); gap: 5px; }
+  .day { min-height: 84px; padding: 6px 5px 5px; }
+  .day .date { font-size: 11px; }
+  .tag { font-size: 10px; padding: 2px 5px; }
+  .calendar-head { font-size: 10px; }
+  .two-col { grid-template-columns: 1fr; gap: 4px; }
+  .condition-row { grid-template-columns: 72px 1fr; }
+}
