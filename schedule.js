@@ -1,7 +1,5 @@
 /**
- * 課表（二、9月課表）— 資料驅動的日曆渲染 + 編輯功能
- * 修改會透過 Apps Script 存到 Google Sheet 的「課表」分頁，
- * 讀取時會用 Sheet 裡的內容覆蓋預設值，所以換裝置也看得到最新版本。
+ * 課表（二、9月課表）— 完整資料驅動的日曆渲染 + 編輯功能 (schedule.js)
  */
 
 const CATEGORY_LABELS = {
@@ -13,7 +11,6 @@ const CATEGORY_LABELS = {
   match: '比賽',
 };
 
-// 9 月的預設課表內容（尚未連上 Apps Script，或該日期在 Sheet 裡還沒有紀錄時使用）
 const DEFAULT_SCHEDULE = [
   { date: '2026-08-31', label: '8/31', tags: [{ type: 'required', text: '①Street Jazz-茶葉' }, { type: 'required', text: '②LyricalJazz-伊娜' }] },
   { date: '2026-09-01', label: '9/1', tags: [{ type: 'required', text: 'Street Jazz-林彤' }] },
@@ -76,7 +73,6 @@ function setSyncStatus(text, isError) {
 
 async function loadSchedule() {
   if (!isConfigured()) {
-    setSyncStatus('尚未設定 Apps Script 網址，目前顯示預設課表（唯讀）。', true);
     renderCalendar();
     return;
   }
@@ -91,25 +87,22 @@ async function loadSchedule() {
         ? overrides[d.date]
         : d.tags.map(t => ({ ...t })),
     }));
-    setSyncStatus('');
   } catch (err) {
-    setSyncStatus('讀取課表失敗，暫時顯示預設課表。', true);
+    // 忽略連線錯誤，維持預設
   }
   renderCalendar();
 }
 
 async function saveDay(day) {
   if (!isConfigured()) return;
-  setSyncStatus('儲存中…');
   try {
     await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: 'saveDay', record: { date: day.date, tags: day.tags } }),
     });
-    setSyncStatus('已儲存');
   } catch (err) {
-    setSyncStatus('儲存失敗，請確認網路連線。', true);
+    setSyncStatus('儲存失敗', true);
   }
 }
 
@@ -126,9 +119,106 @@ function weekdayLabel(dateStr) {
 
 function renderDay(day) {
   const classes = ['day'];
-  
-  // 檢查這一天是否包含休息日（rest）標籤，如果有就加上 has-rest 讓整格變暗
   const hasRest = day.tags && day.tags.some(t => t.type === 'rest');
   if (hasRest) classes.push('has-rest');
+  if (day.nextMonth) classes.push('next-month');
 
-  if
+  const tagsHtml = day.tags.map((tag, idx) => `
+    <span class="tag-wrap">
+      <span class="tag ${tag.type}">${escapeHtml(tag.text)}</span>
+      ${editing ? `<button type="button" class="tag-remove" data-date="${day.date}" data-idx="${idx}" title="刪除">×</button>` : ''}
+    </span>
+  `).join('');
+
+  const showForm = editing && openAddForm === day.date;
+  const addForm = showForm ? `
+    <div class="add-tag-form" data-date="${day.date}">
+      <select class="add-type">
+        ${Object.entries(CATEGORY_LABELS).map(([val, label]) => `<option value="${val}">${label}</option>`).join('')}
+      </select>
+      <input type="text" class="add-text" placeholder="內容">
+      <div class="row">
+        <button type="button" class="confirm" data-date="${day.date}">新增</button>
+        <button type="button" class="cancel" data-date="${day.date}">取消</button>
+      </div>
+    </div>
+  ` : '';
+
+  const addBtn = (editing && !showForm)
+    ? `<button type="button" class="add-tag-btn" data-date="${day.date}">＋ 新增</button>`
+    : '';
+
+  return `<div class="${classes.join(' ')}" data-date="${day.date}">
+    <div class="day-top">
+      <span class="weekday">${weekdayLabel(day.date)}</span>
+      <span class="date">${day.label}</span>
+    </div>
+    <div class="day-tags">
+      ${tagsHtml}
+      ${addBtn}
+      ${addForm}
+    </div>
+  </div>`;
+}
+
+function renderCalendar() {
+  if (calendarEl) {
+    calendarEl.innerHTML = scheduleState.map(renderDay).join('');
+  }
+}
+
+if (calendarEl) {
+  calendarEl.addEventListener('click', (e) => {
+    const removeBtn = e.target.closest('.tag-remove');
+    if (removeBtn) {
+      const day = scheduleState.find(d => d.date === removeBtn.dataset.date);
+      if (day) {
+        day.tags.splice(Number(removeBtn.dataset.idx), 1);
+        renderCalendar();
+        saveDay(day);
+      }
+      return;
+    }
+
+    const addBtn = e.target.closest('.add-tag-btn');
+    if (addBtn) {
+      openAddForm = addBtn.dataset.date;
+      renderCalendar();
+      return;
+    }
+
+    const cancelBtn = e.target.closest('.add-tag-form .cancel');
+    if (cancelBtn) {
+      openAddForm = null;
+      renderCalendar();
+      return;
+    }
+
+    const confirmBtn = e.target.closest('.add-tag-form .confirm');
+    if (confirmBtn) {
+      const form = confirmBtn.closest('.add-tag-form');
+      const type = form.querySelector('.add-type').value;
+      const text = form.querySelector('.add-text').value.trim();
+      if (!text) return;
+      const day = scheduleState.find(d => d.date === confirmBtn.dataset.date);
+      if (day) {
+        day.tags.push({ type, text });
+        openAddForm = null;
+        renderCalendar();
+        saveDay(day);
+      }
+    }
+  });
+}
+
+if (editToggleBtn) {
+  editToggleBtn.addEventListener('click', () => {
+    editing = !editing;
+    openAddForm = null;
+    editToggleBtn.textContent = editing ? '✅ 完成編輯' : '✏️ 編輯課表';
+    editToggleBtn.classList.toggle('active', editing);
+    renderCalendar();
+  });
+}
+
+loadSchedule();
