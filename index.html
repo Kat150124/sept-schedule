@@ -1,363 +1,128 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kat的9月身體課表</title>
-    <style>
-        :root {
-            --bg-color: #f7f9fc;
-            --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-sub: #666666;
-            --primary-color: #4a90e2;
-            --border-color: #e1e8ed;
-            
-            /* 狀態底色 */
-            --empty-day-bg: #ffffff; /* 沒排課日子的底色 */
-            --october-bg: #f0f4f8;   /* 10月跨月份專屬顯色 */
-            --october-border: #b0c4de;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        header p {
-            color: var(--text-sub);
-            margin: 0;
-            font-size: 1.1rem;
-        }
-
-        header h1 {
-            margin: 5px 0 15px 0;
-            font-size: 2rem;
-            color: #2c3e50;
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--primary-color);
-            font-weight: bold;
-            padding: 6px 16px;
-            border: 1px solid var(--primary-color);
-            border-radius: 20px;
-            transition: all 0.2s;
-        }
-
-        nav a:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        section {
-            margin-bottom: 40px;
-        }
-
-        h2 {
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 8px;
-            color: #2c3e50;
-            font-size: 1.4rem;
-        }
-
-        /* 曆法網格樣式 */
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .calendar-header {
-            text-align: center;
-            font-weight: bold;
-            background-color: #2c3e50;
-            color: white;
-            padding: 10px 0;
-            border-radius: 6px;
-        }
-
-        .day-cell {
-            background-color: var(--empty-day-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px;
-            min-height: 110px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            box-sizing: border-box;
-        }
-
-        /* 10月跨月份專屬顯色樣式 */
-        .day-cell.october {
-            background-color: var(--october-bg);
-            border: 2px dashed var(--october-border);
-        }
-
-        .date-number {
-            font-weight: bold;
-            font-size: 0.95rem;
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .october-tag {
-            font-size: 0.75rem;
-            background-color: #6c757d;
-            color: white;
-            padding: 1px 5px;
-            border-radius: 4px;
-        }
-
-        .event-list {
-            flex-grow: 1;
-            font-size: 0.85rem;
-            outline: none;
-            border: 1px dashed transparent;
-            padding: 2px;
-            border-radius: 4px;
-        }
-
-        .event-list:focus {
-            border-color: var(--primary-color);
-            background-color: #fff;
-        }
-
-        .event-item {
-            background: #e8f4fd;
-            color: #1d6fa5;
-            padding: 3px 6px;
-            border-radius: 4px;
-            margin-bottom: 4px;
-            font-size: 0.8rem;
-        }
-
-        /* 操作按鈕 */
-        .cell-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 5px;
-            margin-top: 5px;
-        }
-
-        .btn {
-            font-size: 0.75rem;
-            padding: 2px 6px;
-            border: 1px solid #ccc;
-            background: #fff;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background: #eee;
-        }
-
-        .global-actions {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .btn-primary:hover {
-            background-color: #357abd;
-        }
-
-        /* 響應式調整 */
-        @media (max-width: 768px) {
-            .calendar-grid {
-                grid-template-columns: repeat(1, 1fr);
-            }
-            .calendar-header {
-                display: none;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kat的9月身體課表</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="page">
 
-<div class="container">
-    <header>
-        <p>2026.09</p>
-        <h1>Kat的9月身體課表</h1>
-        <nav>
-            <a href="index.html">課表</a>
-            <a href="notes.html">執行筆記</a>
-        </nav>
-    </header>
+  <p class="eyebrow">2026.09.04</p>
+  <h1>Kat的9月身體課表</h1>
 
-    <section>
-        <h2>二、9月與比賽週課表（可直接點擊編輯內容）</h2>
-        <p style="font-size: 0.85rem; color: #666;">提示：直接點擊各日期的課程文字即可修改，修改後記得點擊下方「儲存全部變更」。</p>
+  <nav class="top-nav">
+    <a href="index.html" class="active">課表</a>
+    <a href="notes.html">執行筆記</a>
+  </nav>
 
-        <!-- 星期標題 -->
-        <div class="calendar-grid" style="min-height: auto;">
-            <div class="calendar-header">一</div>
-            <div class="calendar-header">二</div>
-            <div class="calendar-header">三</div>
-            <div class="calendar-header">四</div>
-            <div class="calendar-header">五</div>
-            <div class="calendar-header">六</div>
-            <div class="calendar-header">日</div>
+  <section>
+    <h2>一、核心原則重點</h2>
+
+    <div class="panel">
+      <h3>1. 現況對照與防護、修復重點</h3>
+
+      <div class="condition-row">
+        <div class="label">左腳踝</div>
+        <div class="flow">
+          <span>肌腱撕裂傷</span><span class="arrow">→</span><span>冰敷、護具加壓、減少過度使用</span>
         </div>
-
-        <!-- 課表主體 (透過 JS 動態生成與讀取儲存資料) -->
-        <div id="calendar-body" class="calendar-grid"></div>
-
-        <div class="global-actions">
-            <button class="btn-primary" onclick="saveSchedule()">儲存全部變更</button>
-            <button class="btn" onclick="resetSchedule()" style="margin-left: 10px;">恢復預設課表</button>
+      </div>
+      <div class="condition-row">
+        <div class="label">右腳膝蓋</div>
+        <div class="flow">
+          <span>後方軟骨磨損</span><span class="arrow">→</span><span>物理治療（降低張力）</span><span class="arrow">→</span><span>練股四頭（分擔軟骨壓力）</span>
         </div>
-    </section>
+      </div>
+      <div class="condition-row">
+        <div class="label">雙膝髕骨</div>
+        <div class="flow">
+          <span>髕骨外翻</span><span class="arrow">→</span><span>護膝</span><span class="arrow">→</span><span>加強大腿內收肌群訓練</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>2. 訓練規劃</h3>
+      <p>課程總量管制：每週只能排三堂常態課（另外加練比賽、每週五培訓課）</p>
+      <p>每日身體訓練：踞腳、臀肌發力訓練，大腿內收肌群訓練</p>
+    </div>
+
+    <div class="panel">
+      <h3>3. 修復規劃</h3>
+      <p>練習期間：注意代償問題，訓練後冰敷＋放鬆！</p>
+      <p>長期目標：先降張力，再把肌力建立起來。建立「不代償」的發力習慣，有意識控制發力位置。</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>二、9月課表</h2>
+      <div class="section-head-controls">
+        <span class="sync-status" id="sync-status"></span>
+        <button type="button" class="edit-toggle-btn" id="edit-toggle">✏️ 編輯課表</button>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span><span class="dot required"></span>必修／常態課</span>
+      <span><span class="dot compete"></span>練比賽</span>
+      <span><span class="dot training"></span>培訓課</span>
+      <span><span class="dot eval"></span>培訓個人考核</span>
+      <span><span class="dot rest"></span>休息日（復健修復日）</span>
+      <span><span class="dot match"></span>比賽</span>
+    </div>
+
+    <div class="calendar-head">
+      <div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div>
+    </div>
+
+    <div class="calendar" id="calendar"></div>
+
+    <div class="warning-box">
+      <div class="warn-line">暫停必修Heels，每天練踞腳、臀肌發力的感覺</div>
+      <div class="warn-line">注意動作控制，避免代償</div>
+      <div class="warn-line">結束後冰敷＋放鬆</div>
+      <div class="warn-line">修復日專注核心、臀肌、大腿內收肌群訓練以及大範圍放鬆</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>三、每日必做</h2>
+    <div class="panel">
+      <div class="two-col">
+        <div>
+          <h4>身體訓練（每天 30 分鐘）</h4>
+          <ul>
+            <li>臀肌發力訓練</li>
+            <li>大腿內收肌群訓練</li>
+            <li>踞腳（腳踝穩定控制）</li>
+          </ul>
+          <h4>其他修復安排</h4>
+          <ul>
+            <li>每週 2-3 次復健、針灸</li>
+          </ul>
+        </div>
+        <div>
+          <h4>放鬆（每天 30 分鐘）</h4>
+          <ul>
+            <li>訓練結束後冰敷</li>
+            <li>全身大範圍放鬆</li>
+          </ul>
+          <h4>待安排</h4>
+          <ul>
+            <li>物理治療／徒手治療（請教小傅）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="page-footer">Kat 的身體重建．訓練追蹤</footer>
 </div>
 
-<script>
-    // 原始預設課表資料
-    const defaultSchedule = [
-        { day: "8/31", events: ["①Street Jazz-茶葉", "②LyricalJazz-伊娜"], isOct: false },
-        { day: "9/1", events: ["Street Jazz-林彤"], isOct: false },
-        { day: "9/2", events: ["Heels-浩琳"], isOct: false },
-        { day: "9/3", events: ["休息／復健修復"], isOct: false },
-        { day: "9/4", events: ["培訓課", "練比賽"], isOct: false },
-        { day: "9/5", events: ["休息／復健修復"], isOct: false },
-        { day: "9/6", events: ["休息／復健修復"], isOct: false },
-
-        { day: "9/7", events: ["①Street Jazz-茶葉", "②LyricalJazz-伊娜", "練比賽"], isOct: false },
-        { day: "9/8", events: [], isOct: false },
-        { day: "9/9", events: [], isOct: false },
-        { day: "9/10", events: ["極簡質感Jazz-伊娜"], isOct: false },
-        { day: "9/11", events: ["培訓課", "練比賽"], isOct: false },
-        { day: "9/12", events: ["桃園盃盃導師指導"], isOct: false },
-        { day: "9/13", events: ["休息／復健修復"], isOct: false },
-
-        { day: "9/14", events: ["①Street Jazz-茶葉", "②LyricalJazz-伊娜"], isOct: false },
-        { day: "9/15", events: ["休息／復健修復"], isOct: false },
-        { day: "9/16", events: ["練比賽"], isOct: false },
-        { day: "9/17", events: ["極簡質感Jazz-伊娜", "練比賽"], isOct: false },
-        { day: "9/18", events: ["培訓個人考核"], isOct: false },
-        { day: "9/19", events: [], isOct: false },
-        { day: "9/20", events: ["休息／復健修復"], isOct: false },
-
-        { day: "9/21", events: ["①Jazz-Emma", "②LyricalJazz-伊娜", "練比賽"], isOct: false },
-        { day: "9/22", events: ["休息／復健修復"], isOct: false },
-        { day: "9/23", events: [], isOct: false },
-        { day: "9/24", events: ["練比賽"], isOct: false },
-        { day: "9/25", events: [], isOct: false },
-        { day: "9/26", events: [], isOct: false },
-        { day: "9/27", events: ["休息／復健修復"], isOct: false },
-
-        { day: "9/28", events: ["①Street Jazz-茶葉", "②LyricalJazz-琬芳", "練比賽"], isOct: false },
-        { day: "9/29", events: ["休息／復健修復"], isOct: false },
-        { day: "9/30", events: [], isOct: false },
-        { day: "10/1", events: ["練比賽"], isOct: true },
-        { day: "10/2", events: [], isOct: true },
-        { day: "10/3", events: ["桃園盃決賽"], isOct: true },
-        { day: "10/4", events: ["連舞比賽"], isOct: true }
-    ];
-
-    // 初始化渲染課表
-    function renderCalendar() {
-        const container = document.getElementById('calendar-body');
-        container.innerHTML = '';
-
-        // 讀取 LocalStorage，若無則使用預設值
-        const savedData = JSON.parse(localStorage.getItem('kat_schedule_data')) || defaultSchedule;
-
-        savedData.forEach((item, index) => {
-            const cell = document.createElement('div');
-            cell.className = `day-cell ${item.isOct ? 'october' : ''}`;
-
-            // 日期標頭
-            let dateHtml = `<div class="date-number"><span>${item.day}</span>`;
-            if (item.isOct) {
-                dateHtml += `<span class="october-tag">10月</span>`;
-            }
-            dateHtml += `</div>`;
-
-            // 事件內容區 (contenteditable 讓使用者可以直接點擊修改)
-            let eventsHtml = `<div class="event-list" contenteditable="true" data-index="${index}">`;
-            if (item.events && item.events.length > 0) {
-                eventsHtml += item.events.join('<br>');
-            }
-            eventsHtml += `</div>`;
-
-            cell.innerHTML = dateHtml + eventsHtml;
-            container.appendChild(cell);
-        });
-    }
-
-    // 儲存變更到 LocalStorage
-    function saveSchedule() {
-        const eventLists = document.querySelectorAll('.event-list');
-        const savedData = JSON.parse(localStorage.getItem('kat_schedule_data')) || defaultSchedule;
-
-        eventLists.forEach((list, index) => {
-            // 透過抓取 innerHTML 或 innerText 轉換成陣列
-            const text = list.innerHTML;
-            // 依據 <br> 或換行符號分割成獨立的行程項目
-            const lines = text.split(/<br\s*[\/]?>|[\r\n]+/)
-                              .map(line => line.replace(/<\/?[^>]+(>|$)/g, "").trim())
-                              .filter(line => line.length > 0);
-            savedData[index].events = lines;
-        });
-
-        localStorage.setItem('kat_schedule_data', JSON.stringify(savedData));
-        alert('課表已成功儲存！重新整理網頁也會保留。');
-        renderCalendar();
-    }
-
-    // 恢復預設
-    function resetSchedule() {
-        if (confirm('確定要恢復成原始預設課表嗎？自訂的修改將會被清除。')) {
-            localStorage.removeItem('kat_schedule_data');
-            renderCalendar();
-            alert('已恢復為預設課表。');
-        }
-    }
-
-    // 頁面載入時執行渲染
-    window.onload = renderCalendar;
-</script>
-
+<script src="config.js"></script>
+<script src="schedule.js"></script>
 </body>
 </html>
