@@ -448,10 +448,9 @@ footer.page-footer {
 }
 
 /* ==========================================================================
-   手機版響應式設定（支援 7 欄水平滑動）
+   手機版響應式設定（支援 7 欄水平滑動與強制均分）
    ========================================================================== */
 @media (max-width: 768px) {
-  /* 外層滑動容器設定 */
   .calendar-scroll-container {
     width: 100%;
     overflow-x: auto;
@@ -459,10 +458,13 @@ footer.page-footer {
     margin-bottom: 1rem;
   }
 
-  /* 強制日曆與星期列表維持最小寬度，避免在手機上被壓扁 */
-  .calendar-scroll-container .calendar,
-  .calendar-scroll-container .calendar-head {
-    min-width: 600px;
+  /* 強制星期列與日曆網格擁有足夠寬度，且完美 7 欄均分 */
+  .calendar-scroll-container .calendar-head,
+  .calendar-scroll-container .calendar {
+    min-width: 700px !important;
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 4px !important;
   }
 
   .page { 
@@ -485,24 +487,5 @@ footer.page-footer {
   .section-head-controls {
     width: 100%;
     justify-content: space-between;
-  }
-}
-@media (max-width: 768px) {
-  /* 確保日曆與星期標題都有固定的最小寬度，不會被壓扁 */
-  .calendar-scroll-container .calendar,
-  .calendar-scroll-container .calendar-head {
-    min-width: 750px !important;
-  }
-
-  /* 強制日曆維持 7 等分網格，且每一欄平均分配寬度 */
-  .calendar-scroll-container .calendar {
-    display: grid !important;
-    grid-template-columns: repeat(7, 1fr) !important;
-  }
-
-  /* 星期標題也強制 7 等分 */
-  .calendar-scroll-container .calendar-head {
-    display: grid !important;
-    grid-template-columns: repeat(7, 1fr) !important;
   }
 }
