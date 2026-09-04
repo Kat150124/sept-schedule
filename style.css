@@ -199,8 +199,8 @@ section > h2 {
 
 .calendar {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(7, 1fr); /* 強制維持 7 欄 */
+  gap: 4px; /* 依照你的設計調整間距 */
 }
 
 .day {
