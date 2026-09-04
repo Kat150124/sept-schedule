@@ -468,7 +468,7 @@ footer.page-footer {
 }
 
 /* ==========================================================================
-   手機版響應式設定（格子寬度 105px、強制顯示日曆與正確格線）
+   手機版響應式設定（維持橫向 7 天，但加寬格子與文字空間）
    ========================================================================== */
 @media (max-width: 768px) {
   .calendar-scroll-container {
@@ -479,18 +479,20 @@ footer.page-footer {
     display: block !important;
   }
 
+  /* 橫向星期標頭，加大寬度讓文字不擠壓 */
   .calendar-scroll-container .calendar-head {
-    min-width: 735px !important;
+    min-width: 910px !important;
     display: grid !important;
-    grid-template-columns: repeat(7, 105px) !important;
-    gap: 4px !important;
+    grid-template-columns: repeat(7, 130px) !important;
+    gap: 6px !important;
   }
 
+  /* 橫向日曆格線，強制 7 欄並排 */
   .calendar-scroll-container .calendar {
-    min-width: 735px !important;
+    min-width: 910px !important;
     display: grid !important;
-    grid-template-columns: repeat(7, 105px) !important;
-    gap: 4px !important;
+    grid-template-columns: repeat(7, 130px) !important;
+    gap: 6px !important;
   }
 
   .calendar-scroll-container .calendar-head > div {
@@ -498,10 +500,13 @@ footer.page-footer {
     font-weight: 600;
   }
 
+  /* 每個日曆格子的寬度放大到 130px，取消不必要的直向拉伸 */
   .calendar-scroll-container .calendar > .day {
-    width: 105px !important;
-    min-width: 105px !important;
+    width: 130px !important;
+    min-width: 130px !important;
+    min-height: 120px !important;
     display: flex !important;
+    flex-direction: column !important;
   }
 
   .page { 
