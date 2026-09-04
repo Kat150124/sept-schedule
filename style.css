@@ -3,35 +3,35 @@
    ========================================================================== */
 
 :root {
-  --bg: #f4f3f0;          /* 整體背景改成帶點暖調的淺燕麥灰白 */
-  --card-bg: #ffffff;     /* 卡片維持乾淨的純白或極淺米白 */
-  --card-border: #e2ded8; /* 邊框改為柔和的奶茶灰邊線 */
-  --ink: #3a3835;         /* 字體改用深咖啡灰，比死黑柔和溫潤 */
-  --ink-soft: #787470;    /* 次要文字改為溫暖的灰褐色 */
+  --bg: #f7f4ef;          /* 溫暖的奶油杏白，比原本更柔和 */
+  --card-bg: #ffffff;     /* 卡片純白，製造乾淨的層次 */
+  --card-border: #e6dfd5; /* 暖調的奶茶灰邊框 */
+  --ink: #38332e;         /* 深可可色字體，溫潤不生硬 */
+  --ink-soft: #827870;    /* 帶點暖調的灰褐色次要文字 */
 
-  /* 調整後的低彩度莫蘭迪/奶茶系標籤色 */
-  --required: #4c6b66;      /* 必修/常態課：低調沉穩的墨綠/松柏綠 */
-  --required-bg: #e8efee;
-  --compete: #8e556b;       /* 練比賽：帶點優雅的乾燥玫瑰紫灰 */
-  --compete-bg: #f5edf1;
-  --training: #94723c;      /* 培訓課：沉穩的暖金棕色 */
-  --training-bg: #f7f2ea;
-  --eval: #9e4f45;          /* 培訓個人考核：沉穩的磚紅褐 */
-  --eval-bg: #f7eeed;
-  --rest: #5c725e;          /* 休息日：柔和的植栽灰綠 */
-  --rest-bg: #eaeede;
-  --match: #8c6e3b;         /* 比賽：溫潤的琥珀棕 */
-  --match-bg: #f6f1ea;
+  /* 帶有柔和手帳感的低彩度莫蘭迪色系 */
+  --required: #436d65;      /* 必修／常態課：沉穩柔和的松石綠 */
+  --required-bg: #e6f0ee;
+  --compete: #9e5d74;       /* 練比賽：溫柔的乾燥玫瑰粉紫 */
+  --compete-bg: #f7ecf0;
+  --training: #9e7b43;      /* 培訓課：暖柔的燕麥棕金 */
+  --training-bg: #f9f3ea;
+  --eval: #a8584e;          /* 培訓個人考核：柔和的磚瓦紅 */
+  --eval-bg: #f9eeed;
+  --rest: #657e62;          /* 休息日：清爽的嫩芽灰綠 */
+  --rest-bg: #edf3ec;
+  --match: #9c7841;         /* 比賽：溫潤的焦糖琥珀 */
+  --match-bg: #fbf5ec;
 
-  --warn-bg: #f5e6e2;
-  --warn-ink: #8f4840;
+  --warn-bg: #f7eae5;
+  --warn-ink: #994c42;
 
-  --nextmonth-bg: #ebeef3;
-  --nextmonth-border: #d2daf0;
-  --nextmonth-ink: #54647c;
+  --nextmonth-bg: #f0f3f8;
+  --nextmonth-border: #d4def0;
+  --nextmonth-ink: #5a6e8c;
 
-  --radius: 12px;           /* 圓角稍微調大一點點（原本 10px），增加圓潤可愛感 */
-  --radius-sm: 8px;
+  --radius: 14px;           /* 圓角再加大一點點，看起來更圓潤可愛 */
+  --radius-sm: 9px;
 }
 
 * { box-sizing: border-box; }
