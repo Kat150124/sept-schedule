@@ -487,3 +487,22 @@ footer.page-footer {
     justify-content: space-between;
   }
 }
+@media (max-width: 768px) {
+  /* 確保日曆與星期標題都有固定的最小寬度，不會被壓扁 */
+  .calendar-scroll-container .calendar,
+  .calendar-scroll-container .calendar-head {
+    min-width: 750px !important;
+  }
+
+  /* 強制日曆維持 7 等分網格，且每一欄平均分配寬度 */
+  .calendar-scroll-container .calendar {
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+  }
+
+  /* 星期標題也強制 7 等分 */
+  .calendar-scroll-container .calendar-head {
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+  }
+}
