@@ -3,25 +3,25 @@
    ========================================================================== */
 
 :root {
-  --bg: #f7f4ef;          /* 溫暖的奶油杏白，比原本更柔和 */
-  --card-bg: #ffffff;     /* 卡片純白，製造乾淨的層次 */
-  --card-border: #e6dfd5; /* 暖調的奶茶灰邊框 */
-  --ink: #38332e;         /* 深可可色字體，溫潤不生硬 */
-  --ink-soft: #827870;    /* 帶點暖調的灰褐色次要文字 */
+  --bg: #f7f4ef;          /* 溫暖的奶油杏白 */
+  --card-bg: #ffffff;     /* 卡片純白 */
+  --card-border: #e6dfd5; /* 暖調灰邊框 */
+  --ink: #38332e;         /* 深可可色字體 */
+  --ink-soft: #827870;    /* 次要文字 */
 
-  /* 帶有柔和手帳感的低彩度莫蘭迪色系 */
-  --required: #436d65;      /* 必修／常態課：沉穩柔和的松石綠 */
-  --required-bg: #e6f0ee;
-  --compete: #9e5d74;       /* 練比賽：溫柔的乾燥玫瑰粉紫 */
-  --compete-bg: #f7ecf0;
-  --training: #9e7b43;      /* 培訓課：暖柔的燕麥棕金 */
-  --training-bg: #f9f3ea;
-  --eval: #a8584e;          /* 培訓個人考核：柔和的磚瓦紅 */
-  --eval-bg: #f9eeed;
-  --rest: #657e62;          /* 休息日：清爽的嫩芽灰綠 */
-  --rest-bg: #edf3ec;
-  --match: #9c7841;         /* 比賽：溫潤的焦糖琥珀 */
-  --match-bg: #fbf5ec;
+  /* 調整後的高辨識度標籤色彩 */
+  --required: #2f6157;      /* 必修／常態課：深沉有力的松石墨綠 */
+  --required-bg: #d7e8e3;
+  --compete: #8c3f5d;       /* 練比賽：鮮明成熟的莓果玫瑰紅 */
+  --compete-bg: #f4dfe6;
+  --training: #8c6427;      /* 培訓課：沉穩清晰的琥珀深金棕 */
+  --training-bg: #f7ede0;
+  --eval: #9e362a;          /* 培訓個人考核：醒目的磚紅警告色 */
+  --eval-bg: #fae4e2;
+  --rest: #4f6b4d;          /* 休息日：清爽沉穩的森林綠 */
+  --rest-bg: #e2ede1;
+  --match: #a3661c;         /* 比賽：高亮度的暖金焦糖色 */
+  --match-bg: #faefdf;
 
   --warn-bg: #f7eae5;
   --warn-ink: #994c42;
@@ -30,7 +30,7 @@
   --nextmonth-border: #d4def0;
   --nextmonth-ink: #5a6e8c;
 
-  --radius: 14px;           /* 圓角再加大一點點，看起來更圓潤可愛 */
+  --radius: 14px;
   --radius-sm: 9px;
 }
 
@@ -459,8 +459,20 @@ footer.page-footer {
     margin-bottom: 1rem;
   }
 
-  /* 強制星期列與日曆網格擁有足夠寬度，且完美 7 欄均分 */
-  .calendar-scroll-container .calendar-head,
+  /* 強制星期列擁有跟日曆完全相同的最小寬度與 7 欄均分網格 */
+  .calendar-scroll-container .calendar-head {
+    min-width: 700px !important;
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    gap: 4px !important;
+    padding: 0 0 8px 0 !important;
+  }
+
+  .calendar-scroll-container .calendar-head > div {
+    text-align: center !important;
+  }
+
+  /* 強制日曆網格擁有相同的最小寬度與 7 欄均分 */
   .calendar-scroll-container .calendar {
     min-width: 700px !important;
     display: grid !important;
