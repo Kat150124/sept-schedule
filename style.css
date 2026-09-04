@@ -3,34 +3,35 @@
    ========================================================================== */
 
 :root {
-  --bg: #eaede8;
-  --card-bg: #f8f9f6;
-  --card-border: #dde2da;
-  --ink: #263029;
-  --ink-soft: #5b6660;
+  --bg: #f4f3f0;          /* 整體背景改成帶點暖調的淺燕麥灰白 */
+  --card-bg: #ffffff;     /* 卡片維持乾淨的純白或極淺米白 */
+  --card-border: #e2ded8; /* 邊框改為柔和的奶茶灰邊線 */
+  --ink: #3a3835;         /* 字體改用深咖啡灰，比死黑柔和溫潤 */
+  --ink-soft: #787470;    /* 次要文字改為溫暖的灰褐色 */
 
-  --required: #2f6f6a;      /* 必修／常態課 */
-  --required-bg: #e1ede9;
-  --compete: #8c3b53;       /* 練比賽 */
-  --compete-bg: #f5e3e8;
-  --training: #a8791f;      /* 培訓課 */
-  --training-bg: #f7ecd3;
-  --eval: #a23b2e;          /* 培訓個人考核 */
-  --eval-bg: #f5dedb;
-  --rest: #5f7a5c;          /* 休息日（復健修復日） */
-  --rest-bg: #e6ede3;
-  --match: #8a5a12;         /* 比賽 */
-  --match-bg: #fbeac9;
+  /* 調整後的低彩度莫蘭迪/奶茶系標籤色 */
+  --required: #4c6b66;      /* 必修/常態課：低調沉穩的墨綠/松柏綠 */
+  --required-bg: #e8efee;
+  --compete: #8e556b;       /* 練比賽：帶點優雅的乾燥玫瑰紫灰 */
+  --compete-bg: #f5edf1;
+  --training: #94723c;      /* 培訓課：沉穩的暖金棕色 */
+  --training-bg: #f7f2ea;
+  --eval: #9e4f45;          /* 培訓個人考核：沉穩的磚紅褐 */
+  --eval-bg: #f7eeed;
+  --rest: #5c725e;          /* 休息日：柔和的植栽灰綠 */
+  --rest-bg: #eaeede;
+  --match: #8c6e3b;         /* 比賽：溫潤的琥珀棕 */
+  --match-bg: #f6f1ea;
 
-  --warn-bg: #f6dcd8;
-  --warn-ink: #8a3b30;
+  --warn-bg: #f5e6e2;
+  --warn-ink: #8f4840;
 
-  --nextmonth-bg: #e7edf6;
-  --nextmonth-border: #c9d6e8;
-  --nextmonth-ink: #4a5d78;
+  --nextmonth-bg: #ebeef3;
+  --nextmonth-border: #d2daf0;
+  --nextmonth-ink: #54647c;
 
-  --radius: 10px;
-  --radius-sm: 6px;
+  --radius: 12px;           /* 圓角稍微調大一點點（原本 10px），增加圓潤可愛感 */
+  --radius-sm: 8px;
 }
 
 * { box-sizing: border-box; }
