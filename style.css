@@ -447,7 +447,21 @@ footer.page-footer {
   text-align: center;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 768px) {
+  /* 外層滑動容器 */
+  .calendar-scroll-container {
+    width: 100%;
+    overflow-x: auto;       /* 允許水平捲動 */
+    -webkit-overflow-scrolling: touch; /* 讓 iOS 裝置滑動更滑順 */
+    margin-bottom: 1rem;
+  }
+
+  /* 確保日曆本身與星期列表有足夠的最小寬度，不會被強行壓縮 */
+  .calendar-scroll-container .calendar,
+  .calendar-scroll-container .calendar-head {
+    min-width: 550px;       
+  }
+}
   .page { padding: 32px 16px 64px; }
 
   .two-col { grid-template-columns: 1fr; gap: 4px; }
