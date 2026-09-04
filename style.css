@@ -9,7 +9,7 @@
   --ink: #38332e;         /* 深可可色字體 */
   --ink-soft: #827870;    /* 次要文字 */
 
-/* 必修維持松石綠，休息日改為沉穩的深石板灰藍，背景拉暗 */
+  /* 高對比、色彩分明且不撞色的人氣標籤色彩 */
   --required: #1b5b52;      /* 必修／常態課：深松石綠 */
   --required-bg: #d2ede7;
   
@@ -22,12 +22,13 @@
   --eval: #b32d2e;          /* 培訓個人考核：正紅色 */
   --eval-bg: #fde8e8;
   
-  --rest: #465563;          /* 休息日：沉穩的石板灰藍（不再跟綠色撞色） */
-  --rest-bg: #d8dee4;       /* 背景直接拉深壓暗，辨識度更高 */
+  --rest: #37434f;          /* 休息日文字：深石板藍灰 */
+  --rest-bg: #cfd6de;       /* 休息日整格背景：更深、更有感的灰藍色 */
+  --rest-border: #b0bcc8;   /* 休息日整格邊框 */
   
   --match: #c46210;         /* 比賽：鮮明亮橘色 */
   --match-bg: #faeade;
-   
+
   --warn-bg: #f7eae5;
   --warn-ink: #994c42;
 
@@ -192,7 +193,7 @@ section > h2 {
 .dot.rest { background: var(--rest); }
 .dot.match { background: var(--match); }
 
-/* calendar */
+/* calendar (桌面版) */
 .calendar-head {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -219,6 +220,16 @@ section > h2 {
   flex-direction: column;
   gap: 6px;
   position: relative;
+}
+
+/* 讓整格休息日直接變暗、換色與加深邊框 */
+.day.has-rest {
+  background: var(--rest-bg) !important;
+  border-color: var(--rest-border) !important;
+}
+
+.day.has-rest .date {
+  color: var(--rest) !important;
 }
 
 .day.next-month {
@@ -268,7 +279,7 @@ section > h2 {
 .tag.compete { background: var(--compete-bg); color: var(--compete); }
 .tag.training { background: var(--training-bg); color: var(--training); }
 .tag.eval { background: var(--eval-bg); color: var(--eval); }
-.tag.rest { background: var(--rest-bg); color: var(--rest); }
+.tag.rest { background: transparent; color: var(--rest); font-weight: 700; padding: 2px 0; }
 .tag.match { background: var(--match-bg); color: var(--match); }
 
 /* section header row */
@@ -454,7 +465,7 @@ footer.page-footer {
 }
 
 /* ==========================================================================
-   手機版響應式設定（支援 7 欄水平滑動與強制均分）
+   手機版響應式設定（強制固定 90px 欄寬，徹底解決星期一寬度異常問題）
    ========================================================================== */
 @media (max-width: 768px) {
   .calendar-scroll-container {
@@ -464,25 +475,22 @@ footer.page-footer {
     margin-bottom: 1rem;
   }
 
-  /* 強制星期列擁有跟日曆完全相同的最小寬度與 7 欄均分網格 */
-  .calendar-scroll-container .calendar-head {
-    min-width: 700px !important;
+  .calendar-scroll-container .calendar-head,
+  .calendar-scroll-container .calendar {
+    min-width: 630px !important;
     display: grid !important;
-    grid-template-columns: repeat(7, 1fr) !important;
+    grid-template-columns: repeat(7, 90px) !important;
     gap: 4px !important;
-    padding: 0 0 8px 0 !important;
   }
 
   .calendar-scroll-container .calendar-head > div {
     text-align: center !important;
+    font-weight: 600;
   }
 
-  /* 強制日曆網格擁有相同的最小寬度與 7 欄均分 */
-  .calendar-scroll-container .calendar {
-    min-width: 700px !important;
-    display: grid !important;
-    grid-template-columns: repeat(7, 1fr) !important;
-    gap: 4px !important;
+  .calendar-scroll-container .calendar > .day {
+    width: 90px !important;
+    min-width: 90px !important;
   }
 
   .page { 
