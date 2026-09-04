@@ -5,4 +5,4 @@
  * 部署好 Apps Script 後，把網址貼在下面的引號中間。
  * 格式類似：https://script.google.com/macros/s/xxxxxxxx/exec
  */
-const APPS_SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySVd3Xya5lRk3UdAQt1q5fMiHv5o1clNNt7RWJyBEhRan_qo3HnUlLD-j3vZekSBdw/exec";
