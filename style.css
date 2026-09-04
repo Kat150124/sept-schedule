@@ -199,8 +199,8 @@ section > h2 {
 
 .calendar {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* 強制維持 7 欄 */
-  gap: 4px; /* 依照你的設計調整間距 */
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
 }
 
 .day {
@@ -265,7 +265,7 @@ section > h2 {
 .tag.rest { background: var(--rest-bg); color: var(--rest); }
 .tag.match { background: var(--match-bg); color: var(--match); }
 
-/* section header row (heading + right-aligned controls), shared by both pages */
+/* section header row */
 .section-head {
   display: flex;
   align-items: baseline;
@@ -447,72 +447,35 @@ footer.page-footer {
   text-align: center;
 }
 
+/* ==========================================================================
+   手機版響應式設定（支援 7 欄水平滑動）
+   ========================================================================== */
 @media (max-width: 768px) {
-  /* 外層滑動容器 */
+  /* 外層滑動容器設定 */
   .calendar-scroll-container {
     width: 100%;
-    overflow-x: auto;       /* 允許水平捲動 */
-    -webkit-overflow-scrolling: touch; /* 讓 iOS 裝置滑動更滑順 */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     margin-bottom: 1rem;
   }
 
-  /* 確保日曆本身與星期列表有足夠的最小寬度，不會被強行壓縮 */
+  /* 強制日曆與星期列表維持最小寬度，避免在手機上被壓扁 */
   .calendar-scroll-container .calendar,
   .calendar-scroll-container .calendar-head {
-    min-width: 550px;       
-  }
-}
-  .page { padding: 32px 16px 64px; }
-
-  .two-col { grid-template-columns: 1fr; gap: 4px; }
-  .condition-row { grid-template-columns: 72px 1fr; }
-
-  /* calendar switches from a 7-column grid to a stacked list of day rows */
-  .calendar-head { display: none; }
-
-  .calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr); /* 強制維持 7 欄 */
-  gap: 4px; /* 依照你的設計調整間距 */
-}
-
-  .day {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 12px;
-    min-height: unset;
-    padding: 12px 14px;
+    min-width: 600px;
   }
 
-  .day-top {
-    flex: 0 0 60px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
+  .page { 
+    padding: 32px 16px 64px; 
   }
 
-  .day .weekday {
-    display: block;
+  .two-col { 
+    grid-template-columns: 1fr; 
+    gap: 4px; 
   }
-
-  .day .date {
-    font-size: 14px;
-  }
-
-  .day-tags {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .tag { font-size: 12px; padding: 3px 8px; }
-
-  .tag-remove { width: 17px; height: 17px; font-size: 11px; line-height: 17px; }
-
-  .add-tag-btn { font-size: 12px; }
-
-  .add-tag-form {
-    flex: 1 0 100%;
+  
+  .condition-row { 
+    grid-template-columns: 72px 1fr; 
   }
 
   .legend {
