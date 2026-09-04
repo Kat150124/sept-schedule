@@ -465,7 +465,7 @@ footer.page-footer {
 }
 
 /* ==========================================================================
-   手機版響應式設定（強制固定 90px 欄寬，徹底解決星期一寬度異常問題）
+   手機版響應式設定（將欄寬放大至 105px，讓格子更寬敞舒適）
    ========================================================================== */
 @media (max-width: 768px) {
   .calendar-scroll-container {
@@ -475,11 +475,12 @@ footer.page-footer {
     margin-bottom: 1rem;
   }
 
+  /* 放大每一欄的固定寬度為 105px */
   .calendar-scroll-container .calendar-head,
   .calendar-scroll-container .calendar {
-    min-width: 630px !important;
+    min-width: 735px !important;
     display: grid !important;
-    grid-template-columns: repeat(7, 90px) !important;
+    grid-template-columns: repeat(7, 105px) !important;
     gap: 4px !important;
   }
 
@@ -489,8 +490,8 @@ footer.page-footer {
   }
 
   .calendar-scroll-container .calendar > .day {
-    width: 90px !important;
-    min-width: 90px !important;
+    width: 105px !important;
+    min-width: 105px !important;
   }
 
   .page { 
