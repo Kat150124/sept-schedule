@@ -1,1 +1,1 @@
-# sept-training-calendar
+# sept-schedule
