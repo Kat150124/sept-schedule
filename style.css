@@ -9,19 +9,24 @@
   --ink: #38332e;         /* 深可可色字體 */
   --ink-soft: #827870;    /* 次要文字 */
 
-  /* 調整後的高辨識度標籤色彩 */
-  --required: #2f6157;      /* 必修／常態課：深沉有力的松石墨綠 */
-  --required-bg: #d7e8e3;
-  --compete: #8c3f5d;       /* 練比賽：鮮明成熟的莓果玫瑰紅 */
-  --compete-bg: #f4dfe6;
-  --training: #8c6427;      /* 培訓課：沉穩清晰的琥珀深金棕 */
-  --training-bg: #f7ede0;
-  --eval: #9e362a;          /* 培訓個人考核：醒目的磚紅警告色 */
-  --eval-bg: #fae4e2;
-  --rest: #4f6b4d;          /* 休息日：清爽沉穩的森林綠 */
-  --rest-bg: #e2ede1;
-  --match: #a3661c;         /* 比賽：高亮度的暖金焦糖色 */
-  --match-bg: #faefdf;
+/* 重新拉開色相的高對比標籤色彩 */
+  --required: #1b5b52;      /* 必修／常態課：深松石綠 (維持冷綠調) */
+  --required-bg: #d2ede7;
+  
+  --compete: #b83265;       /* 練比賽：鮮明洋紅色/桃粉 (拉開粉紅與紅色的距離) */
+  --compete-bg: #fce4ed;
+  
+  --training: #285494;      /* 培訓課：沉穩海軍藍 (從棕色改為藍色系，跟比賽徹底區隔) */
+  --training-bg: #e2ecfd;
+  
+  --eval: #b32d2e;          /* 培訓個人考核：強烈正紅色 (作為考核警告色) */
+  --eval-bg: #fde8e8;
+  
+  --rest: #3b6e3f;          /* 休息日：清爽草綠色 */
+  --rest-bg: #e2f2e3;
+  
+  --match: #c46210;         /* 比賽：鮮明亮橘色 (跟金色/棕色區隔，象徵高光賽事) */
+  --match-bg: #faeade;
 
   --warn-bg: #f7eae5;
   --warn-ink: #994c42;
