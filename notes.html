@@ -293,10 +293,16 @@ const WEEKDAY_LABELS = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
 
 function formatDateDisplay(dateStr) {
   if (!dateStr) return '';
+  // 如果是 ISO 格式或包含時間，直接切取前 10 個字元 (YYYY-MM-DD)
   const cleanStr = String(dateStr).substring(0, 10);
-  const [y, m, d] = cleanStr.split('-').map(Number);
-  if (!y || !m || !d) return cleanStr;
+  const parts = cleanStr.split('-');
+  if (parts.length !== 3) return cleanStr;
+  
+  const y = Number(parts[0]);
+  const m = Number(parts[1]);
+  const d = Number(parts[2]);
 
+  // 用本地時間建立物件來算星期幾，才不會受 UTC 時區影響
   const dateObj = new Date(y, m - 1, d);
   const weekday = WEEKDAY_LABELS[dateObj.getDay()] || '';
 
