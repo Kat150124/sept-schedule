@@ -281,7 +281,7 @@ section > h2 {
 .tag.compete { background: var(--compete-bg); color: var(--compete); }
 .tag.training { background: var(--training-bg); color: var(--training); }
 .tag.eval { background: var(--eval-bg); color: var(--eval); }
-.tag.rest { background: transparent; color: var(--rest); font-weight: 700; padding: 2px 0; }
+.tag.rest { background: var(--rest-bg); color: var(--rest); font-weight: 700; padding: 4px 6px; border-radius: 5px; }
 .tag.match { background: var(--match-bg); color: var(--match); }
 
 /* section header row */
