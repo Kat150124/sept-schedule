@@ -1,5 +1,5 @@
 /**
- * 課表（二、9月課表）— 支援直接點擊標籤修改名稱、資料驅動的日曆渲染與編輯功能 (schedule.js)
+ * 課表（二、9月課表）— 支援直接點擊標籤修改類別與名稱、資料驅動的日曆渲染與編輯功能 (schedule.js)
  */
 
 const CATEGORY_LABELS = {
@@ -56,6 +56,7 @@ const DEFAULT_SCHEDULE = [
 let scheduleState = DEFAULT_SCHEDULE.map(d => ({ ...d, tags: d.tags.map(t => ({ ...t })) }));
 let editing = false;
 let openAddForm = null;
+let editingTag = null; // 紀錄目前正在編輯哪一天的哪一個標籤 { date, idx }
 
 const calendarEl = document.getElementById('calendar');
 const editToggleBtn = document.getElementById('edit-toggle');
@@ -123,12 +124,33 @@ function renderDay(day) {
   if (hasRest) classes.push('has-rest');
   if (day.nextMonth) classes.push('next-month');
 
-  const tagsHtml = day.tags.map((tag, idx) => `
-    <span class="tag-wrap">
-      <span class="tag ${tag.type} ${editing ? 'editable-tag' : ''}" data-date="${day.date}" data-idx="${idx}" title="${editing ? '點擊修改名稱' : ''}">${escapeHtml(tag.text)}</span>
-      ${editing ? `<button type="button" class="tag-remove" data-date="${day.date}" data-idx="${idx}" title="刪除">×</button>` : ''}
-    </span>
-  `).join('');
+  const tagsHtml = day.tags.map((tag, idx) => {
+    const isEditingThisTag = editing && editingTag && editingTag.date === day.date && editingTag.idx === idx;
+
+    // 如果正在編輯這個標籤，顯示修改表單（可選類別與改名）
+    if (isEditingThisTag) {
+      return `
+        <div class="add-tag-form edit-tag-form" data-date="${day.date}" data-idx="${idx}">
+          <select class="edit-type">
+            ${Object.entries(CATEGORY_LABELS).map(([val, label]) => `<option value="${val}" ${val === tag.type ? 'selected' : ''}>${label}</option>`).join('')}
+          </select>
+          <input type="text" class="edit-text" value="${escapeHtml(tag.text)}">
+          <div class="row">
+            <button type="button" class="confirm-edit" data-date="${day.date}" data-idx="${idx}">儲存</button>
+            <button type="button" class="cancel-edit">取消</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // 一般顯示狀態
+    return `
+      <span class="tag-wrap">
+        <span class="tag ${tag.type} ${editing ? 'editable-tag' : ''}" data-date="${day.date}" data-idx="${idx}" title="${editing ? '點擊修改類別與名稱' : ''}">${escapeHtml(tag.text)}</span>
+        ${editing ? `<button type="button" class="tag-remove" data-date="${day.date}" data-idx="${idx}" title="刪除">×</button>` : ''}
+      </span>
+    `;
+  }).join('');
 
   const showForm = editing && openAddForm === day.date;
   const addForm = showForm ? `
@@ -169,26 +191,43 @@ function renderCalendar() {
 
 if (calendarEl) {
   calendarEl.addEventListener('click', (e) => {
+    // 1. 點擊標籤文字 -> 進入該標籤的編輯狀態
     const tagEl = e.target.closest('.editable-tag');
     if (tagEl && editing) {
-      const date = tagEl.dataset.date;
-      const idx = Number(tagEl.dataset.idx);
+      editingTag = { date: tagEl.dataset.date, idx: Number(tagEl.dataset.idx) };
+      openAddForm = null; // 關閉其他新增表單
+      renderCalendar();
+      return;
+    }
+
+    // 2. 取消編輯標籤
+    const cancelEditBtn = e.target.closest('.cancel-edit');
+    if (cancelEditBtn) {
+      editingTag = null;
+      renderCalendar();
+      return;
+    }
+
+    // 3. 儲存編輯標籤
+    const confirmEditBtn = e.target.closest('.confirm-edit');
+    if (confirmEditBtn) {
+      const form = confirmEditBtn.closest('.edit-tag-form');
+      const type = form.querySelector('.edit-type').value;
+      const text = form.querySelector('.edit-text').value.trim();
+      if (!text) return;
+      const date = confirmEditBtn.dataset.date;
+      const idx = Number(confirmEditBtn.dataset.idx);
       const day = scheduleState.find(d => d.date === date);
       if (day && day.tags[idx]) {
-        const currentText = day.tags[idx].text;
-        const newText = prompt('修改課程名稱：', currentText);
-        if (newText !== null) {
-          const trimmed = newText.trim();
-          if (trimmed) {
-            day.tags[idx].text = trimmed;
-            renderCalendar();
-            saveDay(day);
-          }
-        }
+        day.tags[idx] = { type, text };
+        editingTag = null;
+        renderCalendar();
+        saveDay(day);
       }
       return;
     }
 
+    // 4. 刪除標籤
     const removeBtn = e.target.closest('.tag-remove');
     if (removeBtn) {
       const day = scheduleState.find(d => d.date === removeBtn.dataset.date);
@@ -200,13 +239,16 @@ if (calendarEl) {
       return;
     }
 
+    // 5. 點擊「＋ 新增」按鈕
     const addBtn = e.target.closest('.add-tag-btn');
     if (addBtn) {
       openAddForm = addBtn.dataset.date;
+      editingTag = null; // 關閉標籤編輯
       renderCalendar();
       return;
     }
 
+    // 6. 取消新增
     const cancelBtn = e.target.closest('.add-tag-form .cancel');
     if (cancelBtn) {
       openAddForm = null;
@@ -214,6 +256,7 @@ if (calendarEl) {
       return;
     }
 
+    // 7. 確認新增
     const confirmBtn = e.target.closest('.add-tag-form .confirm');
     if (confirmBtn) {
       const form = confirmBtn.closest('.add-tag-form');
@@ -235,6 +278,7 @@ if (editToggleBtn) {
   editToggleBtn.addEventListener('click', () => {
     editing = !editing;
     openAddForm = null;
+    editingTag = null;
     editToggleBtn.textContent = editing ? '✅ 完成編輯' : '✏️ 編輯課表';
     editToggleBtn.classList.toggle('active', editing);
     renderCalendar();
