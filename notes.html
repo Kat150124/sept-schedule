@@ -166,9 +166,6 @@
 </div>
 
 <script>
-/* =========================================================================
-   設定：部署 Google Apps Script 後，把網址貼在這裡（見 README.md 說明）
-   ========================================================================= */
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySVd3Xya5lRk3UdAQt1q5fMiHv5o1clNNt7RWJyBEhRan_qo3HnUlLD-j3vZekSBdw/exec";
 
 const form = document.getElementById('record-form');
@@ -196,6 +193,22 @@ function categoryClass(cat) {
   return 'required';
 }
 
+function formatDateDisplay(dateStr) {
+  if (!dateStr) return '';
+  const cleanStr = String(dateStr).substring(0, 10);
+  const [y, m, d] = cleanStr.split('-').map(Number);
+  if (!y || !m || !d) return cleanStr;
+
+  const dateObj = new Date(y, m - 1, d);
+  const weekdays = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
+  const weekday = weekdays[dateObj.getDay()] || '';
+
+  const mm = String(m).padStart(2, '0');
+  const dd = String(d).padStart(2, '0');
+
+  return `${y}.${mm}.${dd} (${weekday})`;
+}
+
 function renderRecords(records) {
   countBadge.textContent = records.length;
   if (!records.length) {
@@ -206,7 +219,7 @@ function renderRecords(records) {
   listEl.innerHTML = sorted.map(r => `
     <div class="record">
       <div class="record-head">
-        <span class="date">${String(r.date || '').substring(0, 10)}</span>
+        <span class="date">${formatDateDisplay(r.date)}</span>
         <span class="tag ${categoryClass(r.category || '')}">${r.category || ''}</span>
       </div>
       ${r.content ? `<div class="record-row"><span class="k">課程／訓練內容</span>${r.content}</div>` : ''}
