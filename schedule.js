@@ -111,11 +111,21 @@ function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-const WEEKDAY_LABELS = ['日', '一', '二', '三', '四', '五', '六'];
+const WEEKDAY_LABELS = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
 
-function weekdayLabel(dateStr) {
-  const [y, m, d] = dateStr.split('-').map(Number);
-  return WEEKDAY_LABELS[new Date(y, m - 1, d).getDay()];
+function formatDateDisplay(dateStr) {
+  if (!dateStr) return '';
+  const cleanStr = String(dateStr).substring(0, 10);
+  const [y, m, d] = cleanStr.split('-').map(Number);
+  if (!y || !m || !d) return cleanStr;
+
+  const dateObj = new Date(y, m - 1, d);
+  const weekday = WEEKDAY_LABELS[dateObj.getDay()] || '';
+
+  const mm = String(m).padStart(2, '0');
+  const dd = String(d).padStart(2, '0');
+
+  return `${y}.${mm}.${dd} (${weekday})`;
 }
 
 function renderDay(day) {
@@ -127,7 +137,6 @@ function renderDay(day) {
   const tagsHtml = day.tags.map((tag, idx) => {
     const isEditingThisTag = editing && editingTag && editingTag.date === day.date && editingTag.idx === idx;
 
-    // 如果正在編輯這個標籤，顯示修改表單（可選類別與改名）
     if (isEditingThisTag) {
       return `
         <div class="add-tag-form edit-tag-form" data-date="${day.date}" data-idx="${idx}">
@@ -143,7 +152,6 @@ function renderDay(day) {
       `;
     }
 
-    // 一般顯示狀態
     return `
       <span class="tag-wrap">
         <span class="tag ${tag.type} ${editing ? 'editable-tag' : ''}" data-date="${day.date}" data-idx="${idx}" title="${editing ? '點擊修改類別與名稱' : ''}">${escapeHtml(tag.text)}</span>
@@ -172,8 +180,7 @@ function renderDay(day) {
 
   return `<div class="${classes.join(' ')}" data-date="${day.date}">
     <div class="day-top">
-      <span class="weekday">${weekdayLabel(day.date)}</span>
-      <span class="date">${day.label}</span>
+      <span class="date">${formatDateDisplay(day.date)}</span>
     </div>
     <div class="day-tags">
       ${tagsHtml}
@@ -191,16 +198,14 @@ function renderCalendar() {
 
 if (calendarEl) {
   calendarEl.addEventListener('click', (e) => {
-    // 1. 點擊標籤文字 -> 進入該標籤的編輯狀態
     const tagEl = e.target.closest('.editable-tag');
     if (tagEl && editing) {
       editingTag = { date: tagEl.dataset.date, idx: Number(tagEl.dataset.idx) };
-      openAddForm = null; // 關閉其他新增表單
+      openAddForm = null;
       renderCalendar();
       return;
     }
 
-    // 2. 取消編輯標籤
     const cancelEditBtn = e.target.closest('.cancel-edit');
     if (cancelEditBtn) {
       editingTag = null;
@@ -208,7 +213,6 @@ if (calendarEl) {
       return;
     }
 
-    // 3. 儲存編輯標籤
     const confirmEditBtn = e.target.closest('.confirm-edit');
     if (confirmEditBtn) {
       const form = confirmEditBtn.closest('.edit-tag-form');
@@ -227,7 +231,6 @@ if (calendarEl) {
       return;
     }
 
-    // 4. 刪除標籤
     const removeBtn = e.target.closest('.tag-remove');
     if (removeBtn) {
       const day = scheduleState.find(d => d.date === removeBtn.dataset.date);
@@ -239,16 +242,14 @@ if (calendarEl) {
       return;
     }
 
-    // 5. 點擊「＋ 新增」按鈕
     const addBtn = e.target.closest('.add-tag-btn');
     if (addBtn) {
       openAddForm = addBtn.dataset.date;
-      editingTag = null; // 關閉標籤編輯
+      editingTag = null;
       renderCalendar();
       return;
     }
 
-    // 6. 取消新增
     const cancelBtn = e.target.closest('.add-tag-form .cancel');
     if (cancelBtn) {
       openAddForm = null;
@@ -256,7 +257,6 @@ if (calendarEl) {
       return;
     }
 
-    // 7. 確認新增
     const confirmBtn = e.target.closest('.add-tag-form .confirm');
     if (confirmBtn) {
       const form = confirmBtn.closest('.add-tag-form');
