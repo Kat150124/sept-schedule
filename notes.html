@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kat的9月身體課表🐱</title>
+<title>Kat的9月身體課表🐱 - 執行筆記</title>
 <link rel="stylesheet" href="style.css">
 <style>
   .form-grid {
@@ -49,6 +49,27 @@
   .save-btn:hover { background: #275d59; }
   .save-btn:disabled { opacity: 0.6; cursor: default; }
 
+  /* 篩選工具列樣式 */
+  .filter-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 12px 16px;
+    border-radius: var(--radius);
+  }
+  .filter-bar select, .filter-bar input {
+    font: inherit;
+    font-size: 13px;
+    padding: 6px 10px;
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+  }
+
   .section-head {
     display: flex;
     align-items: baseline;
@@ -79,6 +100,7 @@
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
     padding: 16px 18px;
+    position: relative;
   }
   .record + .record { margin-top: 10px; }
   .record-head {
@@ -87,8 +109,31 @@
     gap: 10px;
     flex-wrap: wrap;
     margin-bottom: 8px;
+    justify-content: space-between;
+  }
+  .record-head-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
   .record-head .date { font-weight: 700; font-size: 14px; }
+  .record-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .record-actions button {
+    background: none;
+    border: 1px solid var(--card-border);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--ink-soft);
+  }
+  .record-actions button:hover {
+    background: #f0f0f0;
+    color: var(--ink);
+  }
   .record-row { font-size: 14px; margin: 4px 0; }
   .record-row .k { color: var(--ink-soft); margin-right: 6px; }
   .status-msg { font-size: 13px; margin-top: 10px; min-height: 18px; }
@@ -157,7 +202,31 @@
       <h2>執行紀錄</h2>
       <span class="count-badge" id="count-badge">0</span>
     </div>
-    <p class="subtitle" style="margin-top:-10px; margin-bottom:14px;">依日期由新到舊排列，可隨時回頭查看與調整。</p>
+
+    <!-- 篩選與排序工具列 -->
+    <div class="filter-bar">
+      <div>
+        <label for="filter-category" style="font-size:12px; margin-right:4px;">類別篩選：</label>
+        <select id="filter-category">
+          <option value="">全部類別</option>
+          <option value="必修／常態課">必修／常態課</option>
+          <option value="練比賽">練比賽</option>
+          <option value="培訓課">培訓課</option>
+          <option value="培訓個人考核">培訓個人考核</option>
+          <option value="休息日（復健修復日）">休息日（復健修復日）</option>
+          <option value="比賽">比賽</option>
+        </select>
+      </div>
+      <div>
+        <label for="sort-order" style="font-size:12px; margin-right:4px;">排序：</label>
+        <select id="sort-order">
+          <option value="desc">日期新 → 舊</option>
+          <option value="asc">日期舊 → 新</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="subtitle" style="margin-top:-6px; margin-bottom:14px;">可透過上方條件快速篩選與檢視。</p>
     <div id="record-list">
       <div class="list-empty">還沒有執行筆記。從上方新增第一筆訓練或修復紀錄吧。</div>
     </div>
@@ -165,17 +234,21 @@
   <footer class="page-footer">🐈‍⬛</footer>
 </div>
 
+<script src="config.js"></script>
 <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySVd3Xya5lRk3UdAQt1q5fMiHv5o1clNNt7RWJyBEhRan_qo3HnUlLD-j3vZekSBdw/exec";
-
 const form = document.getElementById('record-form');
 const saveBtn = document.getElementById('save-btn');
 const statusMsg = document.getElementById('status-msg');
 const listEl = document.getElementById('record-list');
 const countBadge = document.getElementById('count-badge');
+const filterCategoryEl = document.getElementById('filter-category');
+const sortOrderEl = document.getElementById('sort-order');
+
+let allRecords = [];
+let editingRecordId = null; // 紀錄目前正在編輯哪一筆紀錄的 ID
 
 function isConfigured() {
-  return APPS_SCRIPT_URL && APPS_SCRIPT_URL.startsWith('http');
+  return typeof APPS_SCRIPT_URL === 'string' && APPS_SCRIPT_URL.startsWith('http');
 }
 
 function setStatus(text, type) {
@@ -193,6 +266,8 @@ function categoryClass(cat) {
   return 'required';
 }
 
+const WEEKDAY_LABELS = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
+
 function formatDateDisplay(dateStr) {
   if (!dateStr) return '';
   const cleanStr = String(dateStr).substring(0, 10);
@@ -200,8 +275,7 @@ function formatDateDisplay(dateStr) {
   if (!y || !m || !d) return cleanStr;
 
   const dateObj = new Date(y, m - 1, d);
-  const weekdays = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
-  const weekday = weekdays[dateObj.getDay()] || '';
+  const weekday = WEEKDAY_LABELS[dateObj.getDay()] || '';
 
   const mm = String(m).padStart(2, '0');
   const dd = String(d).padStart(2, '0');
@@ -209,46 +283,117 @@ function formatDateDisplay(dateStr) {
   return `${y}.${mm}.${dd} (${weekday})`;
 }
 
-function renderRecords(records) {
-  countBadge.textContent = records.length;
-  if (!records.length) {
-    listEl.innerHTML = '<div class="list-empty">還沒有執行筆記。從上方新增第一筆訓練或修復紀錄吧。</div>';
+function renderRecords() {
+  const selectedCategory = filterCategoryEl.value;
+  const sortOrder = sortOrderEl.value;
+
+  // 1. 篩選
+  let filtered = allRecords.filter(r => {
+    if (selectedCategory && r.category !== selectedCategory) return false;
+    return true;
+  });
+
+  // 2. 排序
+  filtered.sort((a, b) => {
+    if (sortOrder === 'asc') {
+      return a.date > b.date ? 1 : -1;
+    } else {
+      return a.date < b.date ? 1 : -1;
+    }
+  });
+
+  countBadge.textContent = filtered.length;
+
+  if (!filtered.length) {
+    listEl.innerHTML = '<div class="list-empty">沒有符合條件的執行筆記。</div>';
     return;
   }
-  const sorted = [...records].sort((a, b) => (a.date < b.date ? 1 : -1));
-  listEl.innerHTML = sorted.map(r => `
-    <div class="record">
-      <div class="record-head">
-        <span class="date">${formatDateDisplay(r.date)}</span>
-        <span class="tag ${categoryClass(r.category || '')}">${r.category || ''}</span>
+
+  listEl.innerHTML = filtered.map(r => {
+    // 如果這筆記錄正在編輯中，顯示編輯表單
+    if (editingRecordId === r.id) {
+      return `
+        <div class="record edit-mode">
+          <div class="form-grid" style="margin-bottom: 12px;">
+            <div class="field">
+              <label>日期</label>
+              <input type="date" id="edit-date-${r.id}" value="${r.date.substring(0, 10)}">
+            </div>
+            <div class="field">
+              <label>類別</label>
+              <select id="edit-category-${r.id}">
+                <option value="必修／常態課" ${r.category === '必修／常態課' ? 'selected' : ''}>必修／常態課</option>
+                <option value="練比賽" ${r.category === '練比賽' ? 'selected' : ''}>練比賽</option>
+                <option value="培訓課" ${r.category === '培訓課' ? 'selected' : ''}>培訓課</option>
+                <option value="培訓個人考核" ${r.category === '培訓個人考核' ? 'selected' : ''}>培訓個人考核</option>
+                <option value="休息日（復健修復日）" ${r.category === '休息日（復健修復日）' ? 'selected' : ''}>休息日（復健修復日）</option>
+                <option value="比賽" ${r.category === '比賽' ? 'selected' : ''}>比賽</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label>課程或訓練內容</label>
+              <input type="text" id="edit-content-${r.id}" value="${escapeHtml(r.content || '')}">
+            </div>
+            <div class="field full">
+              <label>身體感受</label>
+              <input type="text" id="edit-feeling-${r.id}" value="${escapeHtml(r.feeling || '')}">
+            </div>
+            <div class="field full">
+              <label>詳述</label>
+              <textarea id="edit-notes-${r.id}">${escapeHtml(r.notes || '')}</textarea>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="save-btn" style="margin-top:0; padding:6px 14px; font-size:13px;" onclick="saveEdit('${r.id}')">儲存</button>
+            <button type="button" style="background:#ccc; border:none; padding:6px 14px; border-radius:4px; cursor:pointer; font-size:13px;" onclick="cancelEdit()">取消</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // 一般顯示
+    return `
+      <div class="record">
+        <div class="record-head">
+          <div class="record-head-left">
+            <span class="date">${formatDateDisplay(r.date)}</span>
+            <span class="tag ${categoryClass(r.category || '')}">${r.category || ''}</span>
+          </div>
+          <div class="record-actions">
+            <button type="button" onclick="startEdit('${r.id}')">✏️ 編輯</button>
+            <button type="button" onclick="deleteRecord('${r.id}')">🗑️ 刪除</button>
+          </div>
+        </div>
+        ${r.content ? `<div class="record-row"><span class="k">課程／訓練內容</span>${r.content}</div>` : ''}
+        ${r.feeling ? `<div class="record-row"><span class="k">身體感受</span>${r.feeling}</div>` : ''}
+        ${r.notes ? `<div class="record-row"><span class="k">詳述</span>${r.notes}</div>` : ''}
       </div>
-      ${r.content ? `<div class="record-row"><span class="k">課程／訓練內容</span>${r.content}</div>` : ''}
-      ${r.feeling ? `<div class="record-row"><span class="k">身體感受</span>${r.feeling}</div>` : ''}
-      ${r.notes ? `<div class="record-row"><span class="k">詳述</span>${r.notes}</div>` : ''}
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
-  
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
 async function loadRecords() {
   if (!isConfigured()) {
-    setStatus('尚未設定 Apps Script 網址，請見 README.md 完成部署設定。', 'error');
+    listEl.innerHTML = '<div class="list-empty">尚未設定 Apps Script 網址。</div>';
     return;
   }
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=list`);
     const data = await res.json();
-    renderRecords(data.records || []);
+    allRecords = data.records || [];
+    renderRecords();
   } catch (err) {
-    setStatus('讀取紀錄失敗，請確認網路連線或 Apps Script 部署設定。', 'error');
+    listEl.innerHTML = '<div class="list-empty">讀取紀錄失敗，請確認網路連線。</div>';
   }
 }
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  if (!isConfigured()) {
-    setStatus('尚未設定 Apps Script 網址，請見 README.md 完成部署設定。', 'error');
-    return;
-  }
+  if (!isConfigured()) return;
 
   const record = {
     date: document.getElementById('f-date').value,
@@ -276,11 +421,63 @@ form.addEventListener('submit', async (e) => {
     setStatus('已儲存！', 'ok');
     await loadRecords();
   } catch (err) {
-    setStatus('儲存失敗，請確認網路連線或 Apps Script 部署設定。', 'error');
+    setStatus('儲存失敗。', 'error');
   } finally {
     saveBtn.disabled = false;
   }
 });
+
+// 編輯相關控制函式
+function startEdit(id) {
+  editingRecordId = id;
+  renderRecords();
+}
+
+function cancelEdit() {
+  editingRecordId = null;
+  renderRecords();
+}
+
+async function saveEdit(id) {
+  const updatedRecord = {
+    id: id,
+    date: document.getElementById(`edit-date-${id}`).value,
+    category: document.getElementById(`edit-category-${id}`).value,
+    content: document.getElementById(`edit-content-${id}`).value.trim(),
+    feeling: document.getElementById(`edit-feeling-${id}`).value.trim(),
+    notes: document.getElementById(`edit-notes-${id}`).value.trim(),
+  };
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'update', record: updatedRecord }),
+    });
+    editingRecordId = null;
+    await loadRecords();
+  } catch (err) {
+    alert('更新失敗，請稍後再試');
+  }
+}
+
+async function deleteRecord(id) {
+  if (!confirm('確定要刪除這筆執行紀錄嗎？')) return;
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'delete', id: id }),
+    });
+    await loadRecords();
+  } catch (err) {
+    alert('刪除失敗，請稍後再試');
+  }
+}
+
+// 監聽篩選與排序變動
+filterCategoryEl.addEventListener('change', renderRecords);
+sortOrderEl.addEventListener('change', renderRecords);
 
 loadRecords();
 </script>
