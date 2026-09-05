@@ -206,7 +206,7 @@ function renderRecords(records) {
   listEl.innerHTML = sorted.map(r => `
     <div class="record">
       <div class="record-head">
-        <span class="date">${r.date}</span>
+        <span class="date">${String(r.date).split('T')[0].split(' ')[0]}</span>
         <span class="tag ${categoryClass(r.category || '')}">${r.category || ''}</span>
       </div>
       ${r.content ? `<div class="record-row"><span class="k">課程／訓練內容</span>${r.content}</div>` : ''}
