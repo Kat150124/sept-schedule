@@ -1,5 +1,5 @@
 /**
- * 課表（二、9月課表）— 完整資料驅動的日曆渲染 + 編輯功能 (schedule.js)
+ * 課表（二、9月課表）— 支援直接點擊標籤修改名稱、資料驅動的日曆渲染與編輯功能 (schedule.js)
  */
 
 const CATEGORY_LABELS = {
@@ -125,7 +125,7 @@ function renderDay(day) {
 
   const tagsHtml = day.tags.map((tag, idx) => `
     <span class="tag-wrap">
-      <span class="tag ${tag.type}">${escapeHtml(tag.text)}</span>
+      <span class="tag ${tag.type} ${editing ? 'editable-tag' : ''}" data-date="${day.date}" data-idx="${idx}" title="${editing ? '點擊修改名稱' : ''}">${escapeHtml(tag.text)}</span>
       ${editing ? `<button type="button" class="tag-remove" data-date="${day.date}" data-idx="${idx}" title="刪除">×</button>` : ''}
     </span>
   `).join('');
@@ -169,6 +169,26 @@ function renderCalendar() {
 
 if (calendarEl) {
   calendarEl.addEventListener('click', (e) => {
+    const tagEl = e.target.closest('.editable-tag');
+    if (tagEl && editing) {
+      const date = tagEl.dataset.date;
+      const idx = Number(tagEl.dataset.idx);
+      const day = scheduleState.find(d => d.date === date);
+      if (day && day.tags[idx]) {
+        const currentText = day.tags[idx].text;
+        const newText = prompt('修改課程名稱：', currentText);
+        if (newText !== null) {
+          const trimmed = newText.trim();
+          if (trimmed) {
+            day.tags[idx].text = trimmed;
+            renderCalendar();
+            saveDay(day);
+          }
+        }
+      }
+      return;
+    }
+
     const removeBtn = e.target.closest('.tag-remove');
     if (removeBtn) {
       const day = scheduleState.find(d => d.date === removeBtn.dataset.date);
