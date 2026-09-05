@@ -12,15 +12,15 @@ const CATEGORY_LABELS = {
 };
 
 const DEFAULT_SCHEDULE = [
-  { date: '2026-08-31', label: '8/31', tags: [{ type: 'required', text: '①Street Jazz-茶葉' }, { type: 'required', text: '②LyricalJazz-伊娜' }] },
-  { date: '2026-09-01', label: '9/1', tags: [{ type: 'required', text: 'Street Jazz-林彤' }] },
+  { date: '2026-08-31', label: '8/31', tags: [{ type: 'required', text: '①StreetJazz-茶葉' }, { type: 'required', text: '②LyricalJazz-伊娜' }] },
+  { date: '2026-09-01', label: '9/1', tags: [{ type: 'required', text: 'StreetJazz-林彤' }] },
   { date: '2026-09-02', label: '9/2', tags: [{ type: 'required', text: 'Heels-浩琳' }] },
   { date: '2026-09-03', label: '9/3', tags: [{ type: 'rest', text: '休息／復健修復' }] },
   { date: '2026-09-04', label: '9/4', tags: [{ type: 'training', text: '培訓課' }, { type: 'compete', text: '練比賽' }] },
   { date: '2026-09-05', label: '9/5', tags: [{ type: 'rest', text: '休息／復健修復' }] },
   { date: '2026-09-06', label: '9/6', tags: [{ type: 'rest', text: '休息／復健修復' }] },
 
-  { date: '2026-09-07', label: '9/7', tags: [{ type: 'required', text: '①Street Jazz-茶葉' }, { type: 'required', text: '②LyricalJazz-伊娜' }, { type: 'compete', text: '練比賽' }] },
+  { date: '2026-09-07', label: '9/7', tags: [{ type: 'required', text: '①StreetJazz-茶葉' }, { type: 'required', text: '②LyricalJazz-伊娜' }, { type: 'compete', text: '練比賽' }] },
   { date: '2026-09-08', label: '9/8', tags: [] },
   { date: '2026-09-09', label: '9/9', tags: [] },
   { date: '2026-09-10', label: '9/10', tags: [{ type: 'required', text: '極簡質感Jazz-伊娜' }] },
@@ -28,7 +28,7 @@ const DEFAULT_SCHEDULE = [
   { date: '2026-09-12', label: '9/12', tags: [{ type: 'match', text: '桃園盃盃導師指導' }] },
   { date: '2026-09-13', label: '9/13', tags: [{ type: 'rest', text: '休息／復健修復' }] },
 
-  { date: '2026-09-14', label: '9/14', tags: [{ type: 'required', text: '①Street Jazz-茶葉' }, { type: 'required', text: '②LyricalJazz-伊娜' }] },
+  { date: '2026-09-14', label: '9/14', tags: [{ type: 'required', text: '①StreetJazz-茶葉' }, { type: 'required', text: '②LyricalJazz-伊娜' }] },
   { date: '2026-09-15', label: '9/15', tags: [{ type: 'rest', text: '休息／復健修復' }] },
   { date: '2026-09-16', label: '9/16', tags: [{ type: 'compete', text: '練比賽' }] },
   { date: '2026-09-17', label: '9/17', tags: [{ type: 'required', text: '極簡質感Jazz-伊娜' }, { type: 'compete', text: '練比賽' }] },
@@ -44,13 +44,13 @@ const DEFAULT_SCHEDULE = [
   { date: '2026-09-26', label: '9/26', tags: [] },
   { date: '2026-09-27', label: '9/27', tags: [{ type: 'rest', text: '休息／復健修復' }] },
 
-  { date: '2026-09-28', label: '9/28', tags: [{ type: 'required', text: '①Street Jazz-茶葉' }, { type: 'required', text: '②LyricalJazz-琬芳' }, { type: 'compete', text: '練比賽' }] },
+  { date: '2026-09-28', label: '9/28', tags: [{ type: 'required', text: '①StreetJazz-茶葉' }, { type: 'required', text: '②LyricalJazz-翊芳' }, { type: 'compete', text: '練比賽' }] },
   { date: '2026-09-29', label: '9/29', tags: [{ type: 'rest', text: '休息／復健修復' }] },
   { date: '2026-09-30', label: '9/30', tags: [] },
   { date: '2026-10-01', label: '10/1', tags: [{ type: 'compete', text: '練比賽' }], nextMonth: true },
   { date: '2026-10-02', label: '10/2', tags: [], nextMonth: true },
   { date: '2026-10-03', label: '10/3', tags: [{ type: 'match', text: '桃園盃盃決賽' }], nextMonth: true },
-  { date: '2026-10-04', label: '10/4', tags: [{ type: 'match', text: '連舞比賽' }], nextMonth: true },
+  { date: '2026-10-04', label: '10/4', tags: [{ type: 'match', text: '連爵' }], nextMonth: true },
 ];
 
 let scheduleState = DEFAULT_SCHEDULE.map(d => ({ ...d, tags: d.tags.map(t => ({ ...t })) }));
