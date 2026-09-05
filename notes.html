@@ -52,7 +52,7 @@
   /* 篩選工具列樣式 */
   .filter-bar {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     margin-bottom: 16px;
     flex-wrap: wrap;
     align-items: center;
@@ -60,6 +60,11 @@
     border: 1px solid var(--card-border);
     padding: 12px 16px;
     border-radius: var(--radius);
+  }
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
   .filter-bar select, .filter-bar input {
     font: inherit;
@@ -69,6 +74,15 @@
     border-radius: var(--radius-sm);
     background: #fff;
   }
+  .clear-date-btn {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-size: 12px;
+    padding: 2px 4px;
+  }
+  .clear-date-btn:hover { color: var(--ink); }
 
   .section-head {
     display: flex;
@@ -203,10 +217,10 @@
       <span class="count-badge" id="count-badge">0</span>
     </div>
 
-    <!-- 篩選與排序工具列 -->
+    <!-- 篩選與排序工具列（包含指定日期） -->
     <div class="filter-bar">
-      <div>
-        <label for="filter-category" style="font-size:12px; margin-right:4px;">類別篩選：</label>
+      <div class="filter-group">
+        <label for="filter-category" style="font-size:12px;">類別：</label>
         <select id="filter-category">
           <option value="">全部類別</option>
           <option value="必修／常態課">必修／常態課</option>
@@ -217,8 +231,15 @@
           <option value="比賽">比賽</option>
         </select>
       </div>
-      <div>
-        <label for="sort-order" style="font-size:12px; margin-right:4px;">排序：</label>
+
+      <div class="filter-group">
+        <label for="filter-date" style="font-size:12px;">指定日期：</label>
+        <input type="date" id="filter-date">
+        <button type="button" class="clear-date-btn" id="clear-date" title="清除日期">✕</button>
+      </div>
+
+      <div class="filter-group">
+        <label for="sort-order" style="font-size:12px;">排序：</label>
         <select id="sort-order">
           <option value="desc">日期新 → 舊</option>
           <option value="asc">日期舊 → 新</option>
@@ -242,10 +263,12 @@ const statusMsg = document.getElementById('status-msg');
 const listEl = document.getElementById('record-list');
 const countBadge = document.getElementById('count-badge');
 const filterCategoryEl = document.getElementById('filter-category');
+const filterDateEl = document.getElementById('filter-date');
+const clearDateBtn = document.getElementById('clear-date');
 const sortOrderEl = document.getElementById('sort-order');
 
 let allRecords = [];
-let editingRecordId = null; // 紀錄目前正在編輯哪一筆紀錄的 ID
+let editingRecordId = null;
 
 function isConfigured() {
   return typeof APPS_SCRIPT_URL === 'string' && APPS_SCRIPT_URL.startsWith('http');
@@ -285,11 +308,16 @@ function formatDateDisplay(dateStr) {
 
 function renderRecords() {
   const selectedCategory = filterCategoryEl.value;
+  const selectedDate = filterDateEl.value;
   const sortOrder = sortOrderEl.value;
 
-  // 1. 篩選
+  // 1. 篩選（類別 + 指定日期）
   let filtered = allRecords.filter(r => {
     if (selectedCategory && r.category !== selectedCategory) return false;
+    if (selectedDate) {
+      const rDateClean = String(r.date).substring(0, 10);
+      if (rDateClean !== selectedDate) return false;
+    }
     return true;
   });
 
@@ -310,7 +338,6 @@ function renderRecords() {
   }
 
   listEl.innerHTML = filtered.map(r => {
-    // 如果這筆記錄正在編輯中，顯示編輯表單
     if (editingRecordId === r.id) {
       return `
         <div class="record edit-mode">
@@ -351,7 +378,6 @@ function renderRecords() {
       `;
     }
 
-    // 一般顯示
     return `
       <div class="record">
         <div class="record-head">
@@ -427,7 +453,6 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-// 編輯相關控制函式
 function startEdit(id) {
   editingRecordId = id;
   renderRecords();
@@ -475,9 +500,16 @@ async function deleteRecord(id) {
   }
 }
 
-// 監聽篩選與排序變動
+// 監聽篩選、指定日期與排序變動
 filterCategoryEl.addEventListener('change', renderRecords);
+filterDateEl.addEventListener('change', renderRecords);
 sortOrderEl.addEventListener('change', renderRecords);
+
+// 清除指定日期按鈕
+clearDateBtn.addEventListener('click', () => {
+  filterDateEl.value = '';
+  renderRecords();
+});
 
 loadRecords();
 </script>
