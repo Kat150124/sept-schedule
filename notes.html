@@ -206,7 +206,7 @@ function renderRecords(records) {
   listEl.innerHTML = sorted.map(r => `
     <div class="record">
       <div class="record-head">
-        <span class="date">${String(r.date).split('T')[0].split(' ')[0]}</span>
+        <span class="date">${String(r.date || '').substring(0, 10)}</span>
         <span class="tag ${categoryClass(r.category || '')}">${r.category || ''}</span>
       </div>
       ${r.content ? `<div class="record-row"><span class="k">課程／訓練內容</span>${r.content}</div>` : ''}
@@ -215,7 +215,7 @@ function renderRecords(records) {
     </div>
   `).join('');
 }
-
+  
 async function loadRecords() {
   if (!isConfigured()) {
     setStatus('尚未設定 Apps Script 網址，請見 README.md 完成部署設定。', 'error');
