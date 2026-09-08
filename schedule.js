@@ -1,3 +1,7 @@
+/**
+ * 課表（二、9月課表）— 支援直接點擊標籤修改類別與名稱、排序調整與資料驅動的日曆渲染 (schedule.js)
+ */
+
 const CATEGORY_LABELS = {
   required: '必修／常態課',
   compete: '練比賽',
@@ -13,10 +17,10 @@ const DEFAULT_SCHEDULE = [
   { date: '2026-08-31', label: '8/31', tags: [{ type: 'required', text: '①StreetJazz-茶葉' }, { type: 'required', text: '②LyricalJazz-伊娜' }] },
   { date: '2026-09-01', label: '9/1', tags: [{ type: 'required', text: 'StreetJazz-林彤' }] },
   { date: '2026-09-02', label: '9/2', tags: [{ type: 'required', text: 'Heels-浩琳' }] },
-  { date: '2026-09-03', label: '9/3', tags: [{ type: 'rest', text: '休息／復健修復' }] },
+  { date: '2026-09-03', label: '9/3', tags: [{ type: 'rest', text: '' }] },
   { date: '2026-09-04', label: '9/4', tags: [{ type: 'training', text: '培訓課' }, { type: 'compete', text: '練比賽' }] },
-  { date: '2026-09-05', label: '9/5', tags: [{ type: 'rest', text: '休息／復健修復' }] },
-  { date: '2026-09-06', label: '9/6', tags: [{ type: 'rest', text: '休息／復健修復' }] },
+  { date: '2026-09-05', label: '9/5', tags: [{ type: 'rest', text: '' }] },
+  { date: '2026-09-06', label: '9/6', tags: [{ type: 'rest', text: '' }] },
 
   { date: '2026-09-07', label: '9/7', tags: [{ type: 'required', text: '①StreetJazz-茶葉' }, { type: 'required', text: '②LyricalJazz-伊娜' }, { type: 'compete', text: '練比賽' }] },
   { date: '2026-09-08', label: '9/8', tags: [] },
@@ -24,26 +28,26 @@ const DEFAULT_SCHEDULE = [
   { date: '2026-09-10', label: '9/10', tags: [{ type: 'required', text: '極簡質感Jazz-伊娜' }] },
   { date: '2026-09-11', label: '9/11', tags: [{ type: 'training', text: '培訓課' }, { type: 'compete', text: '練比賽' }] },
   { date: '2026-09-12', label: '9/12', tags: [{ type: 'match', text: '桃園盃盃導師指導' }] },
-  { date: '2026-09-13', label: '9/13', tags: [{ type: 'rest', text: '休息／復健修復' }] },
+  { date: '2026-09-13', label: '9/13', tags: [{ type: 'rest', text: '' }] },
 
   { date: '2026-09-14', label: '9/14', tags: [{ type: 'required', text: '①StreetJazz-茶葉' }, { type: 'required', text: '②LyricalJazz-伊娜' }] },
-  { date: '2026-09-15', label: '9/15', tags: [{ type: 'rest', text: '休息／復健修復' }] },
+  { date: '2026-09-15', label: '9/15', tags: [{ type: 'rest', text: '' }] },
   { date: '2026-09-16', label: '9/16', tags: [{ type: 'compete', text: '練比賽' }] },
   { date: '2026-09-17', label: '9/17', tags: [{ type: 'required', text: '極簡質感Jazz-伊娜' }, { type: 'compete', text: '練比賽' }] },
   { date: '2026-09-18', label: '9/18', tags: [{ type: 'eval', text: '培訓個人考核' }] },
   { date: '2026-09-19', label: '9/19', tags: [] },
-  { date: '2026-09-20', label: '9/20', tags: [{ type: 'rest', text: '休息／復健修復' }] },
+  { date: '2026-09-20', label: '9/20', tags: [{ type: 'rest', text: '' }] },
 
   { date: '2026-09-21', label: '9/21', tags: [{ type: 'required', text: '①Jazz-Emma' }, { type: 'required', text: '②LyricalJazz-伊娜' }, { type: 'compete', text: '練比賽' }] },
-  { date: '2026-09-22', label: '9/22', tags: [{ type: 'rest', text: '休息／復健修復' }] },
+  { date: '2026-09-22', label: '9/22', tags: [{ type: 'rest', text: '' }] },
   { date: '2026-09-23', label: '9/23', tags: [] },
   { date: '2026-09-24', label: '9/24', tags: [{ type: 'compete', text: '練比賽' }] },
   { date: '2026-09-25', label: '9/25', tags: [] },
   { date: '2026-09-26', label: '9/26', tags: [] },
-  { date: '2026-09-27', label: '9/27', tags: [{ type: 'rest', text: '休息／復健修復' }] },
+  { date: '2026-09-27', label: '9/27', tags: [{ type: 'rest', text: '' }] },
 
   { date: '2026-09-28', label: '9/28', tags: [{ type: 'required', text: '①StreetJazz-茶葉' }, { type: 'required', text: '②LyricalJazz-翊芳' }, { type: 'compete', text: '練比賽' }] },
-  { date: '2026-09-29', label: '9/29', tags: [{ type: 'rest', text: '休息／復健修復' }] },
+  { date: '2026-09-29', label: '9/29', tags: [{ type: 'rest', text: '' }] },
   { date: '2026-09-30', label: '9/30', tags: [] },
   { date: '2026-10-01', label: '10/1', tags: [{ type: 'compete', text: '練比賽' }], nextMonth: true },
   { date: '2026-10-02', label: '10/2', tags: [], nextMonth: true },
@@ -54,7 +58,7 @@ const DEFAULT_SCHEDULE = [
 let scheduleState = DEFAULT_SCHEDULE.map(d => ({ ...d, tags: d.tags.map(t => ({ ...t })) }));
 let editing = false;
 let openAddForm = null;
-let editingTag = null; 
+let editingTag = null; // 紀錄目前正在編輯哪一天的哪一個標籤 { date, idx }
 
 const calendarEl = document.getElementById('calendar');
 const editToggleBtn = document.getElementById('edit-toggle');
@@ -86,7 +90,9 @@ async function loadSchedule() {
         ? overrides[d.date]
         : d.tags.map(t => ({ ...t })),
     }));
-  } catch (err) {}
+  } catch (err) {
+    // 忽略連線錯誤，維持預設
+  }
   renderCalendar();
 }
 
@@ -104,7 +110,7 @@ async function saveDay(day) {
 }
 
 function escapeHtml(str) {
-  return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return String(str || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 const WEEKDAY_LABELS = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
@@ -139,7 +145,7 @@ function renderDay(day) {
           <select class="edit-type">
             ${Object.entries(CATEGORY_LABELS).map(([val, label]) => `<option value="${val}" ${val === tag.type ? 'selected' : ''}>${label}</option>`).join('')}
           </select>
-          <input type="text" class="edit-text" value="${escapeHtml(tag.text)}" placeholder="選休息日可不填">
+          <input type="text" class="edit-text" value="${escapeHtml(tag.text)}" placeholder="內容（若選休息日可不填）">
           <div class="row">
             <button type="button" class="confirm-edit" data-date="${day.date}" data-idx="${idx}">儲存</button>
             <button type="button" class="cancel-edit">取消</button>
@@ -148,18 +154,21 @@ function renderDay(day) {
       `;
     }
 
-    const moveBtns = editing ? `
-      <span class="tag-order-controls">
-        ${idx > 0 ? `<button type="button" class="move-tag" data-date="${day.date}" data-idx="${idx}" data-dir="up" title="往上移">🔼</button>` : ''}
-        ${idx < day.tags.length - 1 ? `<button type="button" class="move-tag" data-date="${day.date}" data-idx="${idx}" data-dir="down" title="往下移">🔽</button>` : ''}
-      </span>
+    const totalTags = day.tags.length;
+    const actionsHtml = editing ? `
+      <div class="tag-actions">
+        ${idx > 0 ? `<button type="button" class="tag-order-btn" data-date="${day.date}" data-idx="${idx}" data-direction="up" title="往上移">▲</button>` : ''}
+        ${idx < totalTags - 1 ? `<button type="button" class="tag-order-btn" data-date="${day.date}" data-idx="${idx}" data-direction="down" title="往下移">▼</button>` : ''}
+        <button type="button" class="tag-remove" data-date="${day.date}" data-idx="${idx}" title="刪除">×</button>
+      </div>
     ` : '';
+
+    const tagTextDisplay = tag.type === 'rest' && !tag.text ? '休息日' : escapeHtml(tag.text);
 
     return `
       <span class="tag-wrap">
-        <span class="tag ${tag.type} ${editing ? 'editable-tag' : ''}" data-date="${day.date}" data-idx="${idx}" title="${editing ? '點擊修改類別與名稱' : ''}">${escapeHtml(tag.text)}</span>
-        ${moveBtns}
-        ${editing ? `<button type="button" class="tag-remove" data-date="${day.date}" data-idx="${idx}" title="刪除">×</button>` : ''}
+        <span class="tag ${tag.type} ${editing ? 'editable-tag' : ''}" data-date="${day.date}" data-idx="${idx}" title="${editing ? '點擊修改類別與名稱' : ''}">${tagTextDisplay}</span>
+        ${actionsHtml}
       </span>
     `;
   }).join('');
@@ -170,7 +179,7 @@ function renderDay(day) {
       <select class="add-type">
         ${Object.entries(CATEGORY_LABELS).map(([val, label]) => `<option value="${val}">${label}</option>`).join('')}
       </select>
-      <input type="text" class="add-text" placeholder="內容（選休息日可不填）">
+      <input type="text" class="add-text" placeholder="內容（若選休息日可不填）">
       <div class="row">
         <button type="button" class="confirm" data-date="${day.date}">新增</button>
         <button type="button" class="cancel" data-date="${day.date}">取消</button>
@@ -202,25 +211,6 @@ function renderCalendar() {
 
 if (calendarEl) {
   calendarEl.addEventListener('click', (e) => {
-    const moveBtn = e.target.closest('.move-tag');
-    if (moveBtn) {
-      const date = moveBtn.dataset.date;
-      const idx = Number(moveBtn.dataset.idx);
-      const dir = moveBtn.dataset.dir;
-      const day = scheduleState.find(d => d.date === date);
-      if (day) {
-        const targetIdx = dir === 'up' ? idx - 1 : idx + 1;
-        if (targetIdx >= 0 && targetIdx < day.tags.length) {
-          const temp = day.tags[idx];
-          day.tags[idx] = day.tags[targetIdx];
-          day.tags[targetIdx] = temp;
-          renderCalendar();
-          saveDay(day);
-        }
-      }
-      return;
-    }
-
     const tagEl = e.target.closest('.editable-tag');
     if (tagEl && editing) {
       editingTag = { date: tagEl.dataset.date, idx: Number(tagEl.dataset.idx) };
@@ -240,19 +230,34 @@ if (calendarEl) {
     if (confirmEditBtn) {
       const form = confirmEditBtn.closest('.edit-tag-form');
       const type = form.querySelector('.edit-type').value;
-      let text = form.querySelector('.edit-text').value.trim();
-      if (!text) {
-        if (type === 'rest') text = '休息';
-        else return;
-      }
+      const text = form.querySelector('.edit-text').value.trim();
       const date = confirmEditBtn.dataset.date;
       const idx = Number(confirmEditBtn.dataset.idx);
       const day = scheduleState.find(d => d.date === date);
       if (day && day.tags[idx]) {
-        day.tags[idx] = { type, text };
+        day.tags[idx] = { type, text: type === 'rest' && !text ? '' : text };
         editingTag = null;
         renderCalendar();
         saveDay(day);
+      }
+      return;
+    }
+
+    const orderBtn = e.target.closest('.tag-order-btn');
+    if (orderBtn) {
+      const date = orderBtn.dataset.date;
+      const idx = Number(orderBtn.dataset.idx);
+      const direction = orderBtn.dataset.direction;
+      const day = scheduleState.find(d => d.date === date);
+      if (day) {
+        const targetIdx = direction === 'up' ? idx - 1 : idx + 1;
+        if (targetIdx >= 0 && targetIdx < day.tags.length) {
+          const temp = day.tags[idx];
+          day.tags[idx] = day.tags[targetIdx];
+          day.tags[targetIdx] = temp;
+          renderCalendar();
+          saveDay(day);
+        }
       }
       return;
     }
@@ -287,14 +292,10 @@ if (calendarEl) {
     if (confirmBtn) {
       const form = confirmBtn.closest('.add-tag-form');
       const type = form.querySelector('.add-type').value;
-      let text = form.querySelector('.add-text').value.trim();
-      if (!text) {
-        if (type === 'rest') text = '休息';
-        else return;
-      }
+      const text = form.querySelector('.add-text').value.trim();
       const day = scheduleState.find(d => d.date === confirmBtn.dataset.date);
       if (day) {
-        day.tags.push({ type, text });
+        day.tags.push({ type, text: type === 'rest' && !text ? '' : text });
         openAddForm = null;
         renderCalendar();
         saveDay(day);
