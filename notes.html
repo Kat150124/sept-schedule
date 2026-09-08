@@ -151,7 +151,7 @@
   .record-row { font-size: 14px; margin: 4px 0; }
   .record-row .k { color: var(--ink-soft); margin-right: 6px; }
   .status-msg { font-size: 13px; margin-top: 10px; min-height: 18px; }
-  .status-msg.error { color: var(--eval); }
+  .status-msg.error { color: var(--compete); }
   .status-msg.ok { color: var(--required); }
 
   @media (max-width: 760px) {
@@ -186,9 +186,9 @@
             <select id="f-category">
               <option value="必修／常態課">必修／常態課</option>
               <option value="比賽排練">比賽排練</option>
-              <option value="培訓課">培訓</option>
-              <option value="自主訓練">自主訓練</option>
-              <option value="休息日">休息日</option>
+              <option value="培訓">培訓</option>
+              <option value="自主練習">自主練習</option>
+              <option value="身體修復">身體修復</option>
               <option value="比賽">比賽</option>
             </select>
           </div>
@@ -224,10 +224,10 @@
         <select id="filter-category">
           <option value="">全部類別</option>
           <option value="必修／常態課">必修／常態課</option>
-          <option value="練比賽">練比賽</option>
-          <option value="培訓課">培訓課</option>
-          <option value="培訓個人考核">培訓個人考核</option>
-          <option value="休息日（復健修復日）">休息日（復健修復日）</option>
+          <option value="比賽排練">比賽排練</option>
+          <option value="培訓">培訓</option>
+          <option value="自主練習">自主練習</option>
+          <option value="身體修復">身體修復</option>
           <option value="比賽">比賽</option>
         </select>
       </div>
@@ -281,10 +281,10 @@ function setStatus(text, type) {
 
 function categoryClass(cat) {
   if (cat.includes('必修')) return 'required';
-  if (cat.includes('練比賽')) return 'compete';
-  if (cat.includes('培訓課')) return 'training';
-  if (cat.includes('考核')) return 'eval';
-  if (cat.includes('休息')) return 'rest';
+  if (cat.includes('比賽排練')) return 'compete';
+  if (cat.includes('培訓')) return 'training';
+  if (cat.includes('自主練習')) return 'selfpractice';
+  if (cat.includes('身體修復')) return 'bodyrecovery';
   if (cat.includes('比賽')) return 'match';
   return 'required';
 }
@@ -293,7 +293,6 @@ const WEEKDAY_LABELS = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
 
 function formatDateDisplay(dateStr) {
   if (!dateStr) return '';
-  // 如果是 ISO 格式或包含時間，直接切取前 10 個字元 (YYYY-MM-DD)
   const cleanStr = String(dateStr).substring(0, 10);
   const parts = cleanStr.split('-');
   if (parts.length !== 3) return cleanStr;
@@ -302,7 +301,6 @@ function formatDateDisplay(dateStr) {
   const m = Number(parts[1]);
   const d = Number(parts[2]);
 
-  // 用本地時間建立物件來算星期幾，才不會受 UTC 時區影響
   const dateObj = new Date(y, m - 1, d);
   const weekday = WEEKDAY_LABELS[dateObj.getDay()] || '';
 
@@ -317,7 +315,6 @@ function renderRecords() {
   const selectedDate = filterDateEl.value;
   const sortOrder = sortOrderEl.value;
 
-  // 1. 篩選（類別 + 指定日期）
   let filtered = allRecords.filter(r => {
     if (selectedCategory && r.category !== selectedCategory) return false;
     if (selectedDate) {
@@ -327,7 +324,6 @@ function renderRecords() {
     return true;
   });
 
-  // 2. 排序
   filtered.sort((a, b) => {
     if (sortOrder === 'asc') {
       return a.date > b.date ? 1 : -1;
@@ -356,10 +352,10 @@ function renderRecords() {
               <label>類別</label>
               <select id="edit-category-${r.id}">
                 <option value="必修／常態課" ${r.category === '必修／常態課' ? 'selected' : ''}>必修／常態課</option>
-                <option value="練比賽" ${r.category === '練比賽' ? 'selected' : ''}>練比賽</option>
-                <option value="培訓課" ${r.category === '培訓課' ? 'selected' : ''}>培訓課</option>
-                <option value="培訓個人考核" ${r.category === '培訓個人考核' ? 'selected' : ''}>培訓個人考核</option>
-                <option value="休息日（復健修復日）" ${r.category === '休息日（復健修復日）' ? 'selected' : ''}>休息日（復健修復日）</option>
+                <option value="比賽排練" ${r.category === '比賽排練' ? 'selected' : ''}>比賽排練</option>
+                <option value="培訓" ${r.category === '培訓' ? 'selected' : ''}>培訓</option>
+                <option value="自主練習" ${r.category === '自主練習' ? 'selected' : ''}>自主練習</option>
+                <option value="身體修復" ${r.category === '身體修復' ? 'selected' : ''}>身體修復</option>
                 <option value="比賽" ${r.category === '比賽' ? 'selected' : ''}>比賽</option>
               </select>
             </div>
@@ -506,12 +502,10 @@ async function deleteRecord(id) {
   }
 }
 
-// 監聽篩選、指定日期與排序變動
 filterCategoryEl.addEventListener('change', renderRecords);
 filterDateEl.addEventListener('change', renderRecords);
 sortOrderEl.addEventListener('change', renderRecords);
 
-// 清除指定日期按鈕
 clearDateBtn.addEventListener('click', () => {
   filterDateEl.value = '';
   renderRecords();
