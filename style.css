@@ -3,37 +3,37 @@
    ========================================================================== */
 
 :root {
-  --bg: #f7f4ef;          /* 溫暖的奶油杏白 */
-  --card-bg: #ffffff;     /* 卡片純白 */
+  --bg: #f7f4ef;         /* 溫暖的奶油杏白 */
+  --card-bg: #ffffff;      /* 卡片純白 */
   --card-border: #e6dfd5; /* 暖調灰邊框 */
   --ink: #38332e;         /* 深可可色字體 */
   --ink-soft: #827870;    /* 次要文字 */
 
-  /* 高對比、色彩分明且不撞色的人氣標籤色彩 */
-  --required: #1b5b52;      /* 必修／常態課：深松石綠 */
+  /* 8 種分類獨立不撞色配置：保留松石綠，其餘全面错開色相與明度 */
+  --required: #1b5b52;       /* 1. 必修／常態課：深松石綠 */
   --required-bg: #d2ede7;
   
-  --compete: #b83265;       /* 練比賽：桃粉色 */
+  --compete: #b83265;        /* 2. 練比賽：桃粉紅 */
   --compete-bg: #fce4ed;
   
-  --training: #285494;      /* 培訓課：海軍藍 */
+  --training: #285494;       /* 3. 培訓課：海軍藍 */
   --training-bg: #e2ecfd;
   
-  --eval: #6b3fa0;          /* 培訓個人考核：神祕質感紫 */
-  --eval-bg: #ece2f5;       /* 培訓個人考核背景：淺粉紫 */
+  --eval: #6b3fa0;           /* 4. 培訓個人考核：神祕質感紫 */
+  --eval-bg: #ece2f5;
 
-  --selfpractice: #0284c7;  /* 自主練習：亮天藍色 */
-  --selfpractice-bg: #e0f2fe;
+  --selfpractice: #238baf;   /* 5. 自主練習：青藍色（與培訓、修復區隔） */
+  --selfpractice-bg: #e0f4fa;
 
-  --bodyrecovery: #0d9488;  /* 身體修復：湖水綠 */
-  --bodyrecovery-bg: #ccfbf1;
+  --bodyrecovery: #9a5b36;   /* 6. 身體修復：暖古銅棕（與綠、藍、紫徹底分開） */
+  --bodyrecovery-bg: #faece5;
   
-  --rest: #37434f;          /* 休息日文字：深石板藍灰 */
-  --rest-bg: #cfd6de;       /* 休息日整格背景：有感的灰藍色 */
-  --rest-border: #b0bcc8;   /* 休息日整格邊框 */
+  --rest: #37434f;           /* 7. 休息日文字：深石板藍灰 */
+  --rest-bg: #cfd6de;        /* 休息日整格背景：有感的灰藍色 */
+  --rest-border: #b0bcc8;    /* 休息日整格邊框 */
   
-  --match: #c46210;         /* 比賽：鮮明亮橘色 */
-  --match-bg: #faeade;
+  --match: #bc6c25;          /* 8. 比賽：琥珀暖黃棕 */
+  --match-bg: #fcf4ec;
 
   --warn-bg: #f7eae5;
   --warn-ink: #994c42;
