@@ -1,13 +1,11 @@
-/**
- * 課表（二、9月課表）— 支援直接點擊標籤修改類別與名稱、資料驅動的日曆渲染與編輯功能 (schedule.js)
- */
-
 const CATEGORY_LABELS = {
   required: '必修／常態課',
   compete: '練比賽',
   training: '培訓課',
   eval: '培訓個人考核',
-  rest: '休息日（復健修復日）',
+  selfpractice: '自主練習',
+  bodyrecovery: '身體修復',
+  rest: '休息日',
   match: '比賽',
 };
 
@@ -56,7 +54,7 @@ const DEFAULT_SCHEDULE = [
 let scheduleState = DEFAULT_SCHEDULE.map(d => ({ ...d, tags: d.tags.map(t => ({ ...t })) }));
 let editing = false;
 let openAddForm = null;
-let editingTag = null; // 紀錄目前正在編輯哪一天的哪一個標籤 { date, idx }
+let editingTag = null; 
 
 const calendarEl = document.getElementById('calendar');
 const editToggleBtn = document.getElementById('edit-toggle');
@@ -88,9 +86,7 @@ async function loadSchedule() {
         ? overrides[d.date]
         : d.tags.map(t => ({ ...t })),
     }));
-  } catch (err) {
-    // 忽略連線錯誤，維持預設
-  }
+  } catch (err) {}
   renderCalendar();
 }
 
@@ -143,7 +139,7 @@ function renderDay(day) {
           <select class="edit-type">
             ${Object.entries(CATEGORY_LABELS).map(([val, label]) => `<option value="${val}" ${val === tag.type ? 'selected' : ''}>${label}</option>`).join('')}
           </select>
-          <input type="text" class="edit-text" value="${escapeHtml(tag.text)}">
+          <input type="text" class="edit-text" value="${escapeHtml(tag.text)}" placeholder="選休息日可不填">
           <div class="row">
             <button type="button" class="confirm-edit" data-date="${day.date}" data-idx="${idx}">儲存</button>
             <button type="button" class="cancel-edit">取消</button>
@@ -152,9 +148,17 @@ function renderDay(day) {
       `;
     }
 
+    const moveBtns = editing ? `
+      <span class="tag-order-controls">
+        ${idx > 0 ? `<button type="button" class="move-tag" data-date="${day.date}" data-idx="${idx}" data-dir="up" title="往上移">🔼</button>` : ''}
+        ${idx < day.tags.length - 1 ? `<button type="button" class="move-tag" data-date="${day.date}" data-idx="${idx}" data-dir="down" title="往下移">🔽</button>` : ''}
+      </span>
+    ` : '';
+
     return `
       <span class="tag-wrap">
         <span class="tag ${tag.type} ${editing ? 'editable-tag' : ''}" data-date="${day.date}" data-idx="${idx}" title="${editing ? '點擊修改類別與名稱' : ''}">${escapeHtml(tag.text)}</span>
+        ${moveBtns}
         ${editing ? `<button type="button" class="tag-remove" data-date="${day.date}" data-idx="${idx}" title="刪除">×</button>` : ''}
       </span>
     `;
@@ -166,7 +170,7 @@ function renderDay(day) {
       <select class="add-type">
         ${Object.entries(CATEGORY_LABELS).map(([val, label]) => `<option value="${val}">${label}</option>`).join('')}
       </select>
-      <input type="text" class="add-text" placeholder="內容">
+      <input type="text" class="add-text" placeholder="內容（選休息日可不填）">
       <div class="row">
         <button type="button" class="confirm" data-date="${day.date}">新增</button>
         <button type="button" class="cancel" data-date="${day.date}">取消</button>
@@ -198,6 +202,25 @@ function renderCalendar() {
 
 if (calendarEl) {
   calendarEl.addEventListener('click', (e) => {
+    const moveBtn = e.target.closest('.move-tag');
+    if (moveBtn) {
+      const date = moveBtn.dataset.date;
+      const idx = Number(moveBtn.dataset.idx);
+      const dir = moveBtn.dataset.dir;
+      const day = scheduleState.find(d => d.date === date);
+      if (day) {
+        const targetIdx = dir === 'up' ? idx - 1 : idx + 1;
+        if (targetIdx >= 0 && targetIdx < day.tags.length) {
+          const temp = day.tags[idx];
+          day.tags[idx] = day.tags[targetIdx];
+          day.tags[targetIdx] = temp;
+          renderCalendar();
+          saveDay(day);
+        }
+      }
+      return;
+    }
+
     const tagEl = e.target.closest('.editable-tag');
     if (tagEl && editing) {
       editingTag = { date: tagEl.dataset.date, idx: Number(tagEl.dataset.idx) };
@@ -217,8 +240,11 @@ if (calendarEl) {
     if (confirmEditBtn) {
       const form = confirmEditBtn.closest('.edit-tag-form');
       const type = form.querySelector('.edit-type').value;
-      const text = form.querySelector('.edit-text').value.trim();
-      if (!text) return;
+      let text = form.querySelector('.edit-text').value.trim();
+      if (!text) {
+        if (type === 'rest') text = '休息';
+        else return;
+      }
       const date = confirmEditBtn.dataset.date;
       const idx = Number(confirmEditBtn.dataset.idx);
       const day = scheduleState.find(d => d.date === date);
@@ -261,8 +287,11 @@ if (calendarEl) {
     if (confirmBtn) {
       const form = confirmBtn.closest('.add-tag-form');
       const type = form.querySelector('.add-type').value;
-      const text = form.querySelector('.add-text').value.trim();
-      if (!text) return;
+      let text = form.querySelector('.add-text').value.trim();
+      if (!text) {
+        if (type === 'rest') text = '休息';
+        else return;
+      }
       const day = scheduleState.find(d => d.date === confirmBtn.dataset.date);
       if (day) {
         day.tags.push({ type, text });
